@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { HiOutlineVolumeOff, HiOutlineVolumeUp } from "react-icons/hi";
 import { AiOutlineEye } from "react-icons/ai";
 import { GrCircleInformation } from "react-icons/gr";
+import ModeSelection from "../ModeSelection";
 
 import styled from "styled-components";
 
@@ -27,6 +28,10 @@ function Main() {
       </button>
       <MainTitle>Scroll Treadmill</MainTitle>
       <SubTitle>Running game with mouse scroll event</SubTitle>
+      <Wrapper>
+        <ModeSelection />
+        <ModeSelection />
+      </Wrapper>
     </>
   );
 }
@@ -47,6 +52,11 @@ const SubTitle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  padding: 10px;
 `;
 
 export default Main;
