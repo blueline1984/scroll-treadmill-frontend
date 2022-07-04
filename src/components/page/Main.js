@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { HiOutlineVolumeOff, HiOutlineVolumeUp } from "react-icons/hi";
-import { AiOutlineEye } from "react-icons/ai";
+import { AiOutlineEye, AiOutlineInfoCircle } from "react-icons/ai";
 import { GrCircleInformation } from "react-icons/gr";
 import ModeSelection from "../ModeSelection";
 
@@ -11,34 +11,60 @@ function Main() {
 
   return (
     <>
-      {isPlaying ? (
-        <button>
-          <HiOutlineVolumeUp />
+      <IconWrapper>
+        {isPlaying ? (
+          <button className="sound">
+            <HiOutlineVolumeUp size={60} color="#fff" />
+          </button>
+        ) : (
+          <button
+            className="sound"
+            onClick={() => {
+              console.log("123");
+            }}
+          >
+            <HiOutlineVolumeOff size={60} color="#fff" />
+          </button>
+        )}
+        <button className="eye">
+          <AiOutlineEye className="logo" size={55} />
         </button>
-      ) : (
-        <button>
-          <HiOutlineVolumeOff />
+        <button className="information">
+          <AiOutlineInfoCircle size={50} color="#fff" />
         </button>
-      )}
-      <button>
-        <AiOutlineEye />
-      </button>
-      <button>
-        <GrCircleInformation />
-      </button>
+      </IconWrapper>
       <MainTitle>Scroll Treadmill</MainTitle>
       <SubTitle>Running game with mouse scroll event</SubTitle>
-      <Wrapper>
+      <ModeWrapper>
         <ModeSelection />
-        <ModeSelection />
-      </Wrapper>
+      </ModeWrapper>
     </>
   );
 }
+const IconWrapper = styled.div`
+  padding: 10px 24px;
+  button {
+    border: none;
+    position: absolute;
+    left: 95%;
+  }
+  button.sound {
+    top: 5%;
+  }
+  button.eye {
+    top: 11%;
+  }
+  button.information {
+    top: 17%;
+  }
+  .logo {
+    color: white;
+  }
+`;
 
 const MainTitle = styled.div`
   color: white;
-  margin-top: 10%;
+  margin-top: 7%;
   font-size: 200px;
   display: flex;
   justify-content: center;
@@ -54,9 +80,11 @@ const SubTitle = styled.div`
   align-items: center;
 `;
 
-const Wrapper = styled.div`
+const ModeWrapper = styled.div`
   display: flex;
-  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5%;
 `;
 
 export default Main;
