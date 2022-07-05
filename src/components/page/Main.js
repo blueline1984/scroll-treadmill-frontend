@@ -8,10 +8,14 @@ import styled from "styled-components";
 
 function Main() {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [onBlindMode, setOnBlindMode] = useState(0);
   const audioRef = useRef(new Audio(mainThemeSong));
 
   const handleSound = () => {
     setIsPlaying((isPlaying) => !isPlaying);
+  };
+  const handleBlindMode = () => {
+    setOnBlindMode((onBlindMode + 1) % 3);
   };
 
   useEffect(() => {
@@ -37,7 +41,7 @@ function Main() {
           </button>
         )}
         <button className="eye">
-          <AiOutlineEye className="logo" size={55} />
+          <AiOutlineEye className="logo" size={55} onClick={handleBlindMode} />
         </button>
         <button className="information">
           <AiOutlineInfoCircle size={50} color="#fff" />
@@ -46,7 +50,7 @@ function Main() {
       <MainTitle>Scroll Treadmill</MainTitle>
       <SubTitle>Running game with mouse scroll event</SubTitle>
       <ModeWrapper>
-        <ModeSelection />
+        <ModeSelection onBlindMode={onBlindMode} />
       </ModeWrapper>
     </>
   );

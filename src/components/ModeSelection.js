@@ -1,16 +1,77 @@
 import React from "react";
 import styled from "styled-components";
 
-function ModeSelection() {
+function ModeSelection({ onBlindMode }) {
+  console.log("onBlindMode", onBlindMode);
   return (
     <>
       <Wrapper>
-        <div className="title">Single Mode</div>
-        <button className="single">Play Single Mode</button>
+        {onBlindMode === 0 && (
+          <>
+            <div className="title">Single Mode</div>
+            <button className="single">Play Single Mode</button>
+          </>
+        )}
+        {onBlindMode === 1 && (
+          <>
+            <div
+              className="title"
+              style={{ color: "#00F302", borderBottom: "solid 1px #00F302" }}
+            >
+              Single Mode
+            </div>
+            <button className="single" style={{ border: "solid 1px #00F302" }}>
+              Play Single Mode
+            </button>
+          </>
+        )}
+        {onBlindMode === 2 && (
+          <>
+            <div
+              className="title"
+              style={{ color: "#F1F10E", borderBottom: "solid 1px #F1F10E" }}
+            >
+              Single Mode
+            </div>
+            <button className="single" style={{ border: "solid 1px #F1F10E" }}>
+              Play Single Mode
+            </button>
+          </>
+        )}
       </Wrapper>
       <Wrapper>
-        <div className="title">Multi Mode</div>
-        <button className="multi">Play Multi Mode</button>
+        {onBlindMode === 0 && (
+          <>
+            <div className="title">Multi Mode</div>
+            <button className="multi">Play Multi Mode</button>
+          </>
+        )}
+        {onBlindMode === 1 && (
+          <>
+            <div
+              className="title"
+              style={{ color: "#00F302", borderBottom: "solid 1px #00F302" }}
+            >
+              Multi Mode
+            </div>
+            <button className="multi" style={{ border: "solid 1px #00F302" }}>
+              Play Multi Mode
+            </button>
+          </>
+        )}
+        {onBlindMode === 2 && (
+          <>
+            <div
+              className="title"
+              style={{ color: "#F1F10E", borderBottom: "solid 1px #F1F10E" }}
+            >
+              Multi Mode
+            </div>
+            <button className="multi" style={{ border: "solid 1px #F1F10E" }}>
+              Play Multi Mode
+            </button>
+          </>
+        )}
       </Wrapper>
     </>
   );
@@ -34,22 +95,20 @@ const Wrapper = styled.div`
 
   button {
     border: none;
+    color: white;
+    font-size: 40px;
+    padding: 10px 15px;
+    width: 350px;
   }
   button.single {
-    color: white;
-    width: 350px;
     background-color: #0f233c;
-    font-size: 50px;
   }
   button.single: hover {
     color: #0f233c;
     background-color: white;
   }
   button.multi {
-    color: white;
-    width: 350px;
     background-color: #adcf9f;
-    font-size: 50px;
   }
   button.multi: hover {
     color: #adcf9f;
