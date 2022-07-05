@@ -1,28 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { HiOutlineVolumeOff, HiOutlineVolumeUp } from "react-icons/hi";
 import { AiOutlineEye, AiOutlineInfoCircle } from "react-icons/ai";
-import { GrCircleInformation } from "react-icons/gr";
 import ModeSelection from "../ModeSelection";
+import mainThemeSong from "../../assets/main_theme.mp3";
 
 import styled from "styled-components";
 
 function Main() {
   const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef(new Audio(mainThemeSong));
+
+  const handleSound = () => {
+    setIsPlaying((isPlaying) => !isPlaying);
+  };
+
+  useEffect(() => {
+    if (isPlaying) {
+      audioRef.current.play();
+      audioRef.current.loop = true;
+      audioRef.current.autoplay = true;
+    } else {
+      audioRef.current.pause();
+    }
+  }, [isPlaying]);
 
   return (
     <>
       <IconWrapper>
         {isPlaying ? (
           <button className="sound">
-            <HiOutlineVolumeUp size={60} color="#fff" />
+            <HiOutlineVolumeUp size={60} color="#fff" onClick={handleSound} />
           </button>
         ) : (
-          <button
-            className="sound"
-            onClick={() => {
-              console.log("123");
-            }}
-          >
+          <button className="sound" onClick={handleSound}>
             <HiOutlineVolumeOff size={60} color="#fff" />
           </button>
         )}
@@ -41,6 +51,7 @@ function Main() {
     </>
   );
 }
+
 const IconWrapper = styled.div`
   padding: 10px 24px;
   button {
