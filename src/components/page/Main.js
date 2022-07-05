@@ -1,14 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 import { HiOutlineVolumeOff, HiOutlineVolumeUp } from "react-icons/hi";
 import { AiOutlineEye, AiOutlineInfoCircle } from "react-icons/ai";
-import ModeSelection from "../ModeSelection";
 import mainThemeSong from "../../assets/main_theme.mp3";
+
+import ModeSelection from "../ModeSelection";
+import Modal from "../Modal";
 
 import styled from "styled-components";
 
 function Main() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [onBlindMode, setOnBlindMode] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
   const audioRef = useRef(new Audio(mainThemeSong));
 
   const handleSound = () => {
@@ -17,8 +20,15 @@ function Main() {
   const handleBlindMode = () => {
     setOnBlindMode((onBlindMode + 1) % 3);
   };
+  const openModal = () => {
+    setIsOpen(true);
+  };
+  const closeModal = () => {
+    setIsOpen(false);
+  };
 
   useEffect(() => {
+    //위치 변경
     if (isPlaying) {
       audioRef.current.play();
       audioRef.current.loop = true;
@@ -30,6 +40,20 @@ function Main() {
 
   return (
     <>
+      {isOpen && (
+        <Modal
+          onClose={closeModal}
+          message={
+            <>
+              <h1>about</h1>
+              <div>
+                This game is made for optimizing mouse scroll event in
+                JavaScript.....
+              </div>
+            </>
+          }
+        />
+      )}
       <IconWrapper>
         {isPlaying ? (
           <button className="sound">
@@ -43,7 +67,7 @@ function Main() {
         <button className="eye">
           <AiOutlineEye className="logo" size={55} onClick={handleBlindMode} />
         </button>
-        <button className="information">
+        <button className="information" onClick={openModal}>
           <AiOutlineInfoCircle size={50} color="#fff" />
         </button>
       </IconWrapper>
@@ -73,12 +97,12 @@ const IconWrapper = styled.div`
     top: 17%;
   }
   .logo {
-    color: white;
+    color: #fff;
   }
 `;
 
 const MainTitle = styled.div`
-  color: white;
+  color: #fff;
   margin-top: 7%;
   font-size: 200px;
   display: flex;
@@ -87,7 +111,7 @@ const MainTitle = styled.div`
 `;
 
 const SubTitle = styled.div`
-  color: white;
+  color: #fff;
   margin-top: 0;
   font-size: 50px;
   display: flex;
