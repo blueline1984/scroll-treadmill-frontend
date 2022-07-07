@@ -1,16 +1,16 @@
 import Phaser from "phaser";
-import SinglePlay from "./SinglePlay";
+import Single from "./SinglePlay";
 
 const config = {
   type: Phaser.AUTO,
-  width: 1920,
-  height: 1080,
+  width: window.innerWidth,
+  height: window.innerHeight,
   scale: {
     mode: Phaser.Scale.FIT,
-    autoCenter: Phaser.Scale.CENTER_BOTH,
-    parent: "phaser-container",
+    autoCenter: Phaser.Scale.CENTER,
   },
-  backgroundColor: "#A0BCC2",
+  parent: "phaser-container",
+  backgroundColor: "#354259",
   physics: {
     default: "arcade",
     arcade: {
@@ -18,7 +18,7 @@ const config = {
       debug: true,
     },
   },
-  scene: [Preloader, SinglePlay],
+  scene: [Single],
 };
 
-export default new Phaser.Game(config);
+export default config;
