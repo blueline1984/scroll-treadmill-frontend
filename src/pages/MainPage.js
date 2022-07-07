@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import { HiOutlineVolumeOff, HiOutlineVolumeUp } from "react-icons/hi";
 import { AiOutlineEye, AiOutlineInfoCircle } from "react-icons/ai";
-import mainThemeSong from "../../assets/main_theme.mp3";
+import mainThemeSong from "../assets/main_theme.mp3";
 
-import ModeSelection from "../ModeSelection";
-import Modal from "../Modal";
+import ModeSelection from "../components/ModeSelection";
+import Modal from "../components/Modal";
 
 import styled from "styled-components";
 
-function Main() {
+function MainPage() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [onBlindMode, setOnBlindMode] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
@@ -126,4 +126,4 @@ const ModeWrapper = styled.div`
   margin-top: 5%;
 `;
 
-export default Main;
+export default MainPage;
