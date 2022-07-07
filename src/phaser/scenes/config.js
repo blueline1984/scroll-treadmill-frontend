@@ -8,6 +8,7 @@ const config = {
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
+    parent: "phaser-container",
   },
   backgroundColor: "#A0BCC2",
   physics: {
