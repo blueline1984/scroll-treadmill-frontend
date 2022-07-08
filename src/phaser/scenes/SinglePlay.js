@@ -11,20 +11,27 @@ export default class Single extends Phaser.Scene {
       frameWidth: 68,
       frameHeight: 93,
     });
+
     this.load.spritesheet("treadmill", "textures/treadmill_spritesheet.png", {
       frameWidth: 1800,
       frameHeight: 750,
     });
+
+    this.load.image("me", "textures/me.png");
 
     const countDownScene = new CountDownScene(this.scene);
     this.scene.add("CountDownScene", countDownScene, false);
   }
 
   create() {
+    this.me = this.add.image(0, 5, "me");
+
     //Timer
     this.setTimer();
+    this.stTime = new Date().getTime();
 
-    this.label = this.add.text(1000, 10, `Speed: 0`, {
+    //Character Velocity
+    this.velocity = this.add.text(1000, 10, `Speed: `, {
       fontSize: 32,
       fontFamily: "roboto",
     });
@@ -65,7 +72,7 @@ export default class Single extends Phaser.Scene {
         start: 0,
         end: 1,
       }),
-      frameRate: 10,
+      frameRate: 20,
       repeat: -1,
     });
 
@@ -75,7 +82,7 @@ export default class Single extends Phaser.Scene {
       .setSize(50, 80)
       .setOffset(10, 10)
       .play("down-idle")
-      .setGravityY(30000); //중력
+      .setGravityY(30000);
 
     this.treadmill = this.physics.add
       .sprite(width * 0.5, height * 0.7, "treadmill")
@@ -89,16 +96,31 @@ export default class Single extends Phaser.Scene {
   }
 
   update() {
-    // Timer
-    const calculateTime = (current) => {
-      const currentMinute = Math.floor((current / (1000 * 60)) % 60);
-      const currentSecond = Math.floor((current / 1000) % 60);
-      const currentMilliSecond = current.toString().substr(1, 2);
+    //identifier
+    this.me.x = this.player.body.position.x + 30;
+    this.me.y = this.player.body.position.y - 100;
 
-      return `${currentMinute}:${currentSecond}:${currentMilliSecond}`;
-    };
+    //Time Checker
+    this.nowTime = new Date().getTime();
+    this.newTime = new Date(this.nowTime - this.stTime);
 
-    this.countDown.setText(`Time: ${calculateTime(this.time.now)}`);
+    function addZero(num) {
+      return num < 10 ? "0" + num : "" + num;
+    }
+
+    this.timer.setText(
+      `Time: ${addZero(this.newTime.getMinutes())} : ${addZero(
+        this.newTime.getSeconds()
+      )} : ${Math.floor(this.newTime.getMilliseconds() / 10)}`
+    );
+
+    //Character Velocity
+    this.velocity.setText(
+      `Speed: ${
+        this.player.body.velocity.x /
+        Math.floor(this.newTime.getMilliseconds() / 10).toFixed(2)
+      } m/s`
+    );
 
     //Character Move Animation
     const speed = 500;
@@ -116,13 +138,13 @@ export default class Single extends Phaser.Scene {
     this.player.setVelocity(0, 0);
 
     if (this.treadmill.body.touching.up && this.player.body.touching.down) {
-      this.player.body.position.add({ x: -3, y: 0 });
+      this.player.body.position.add({ x: -5, y: 0 });
     }
   }
 
-  //Timer
+  //Time Checker
   setTimer() {
-    this.countDown = this.add.text(100, 10, "Timer: ", {
+    this.timer = this.add.text(100, 10, "Timer: ", {
       fontSize: 32,
       fontFamily: "roboto",
     });
