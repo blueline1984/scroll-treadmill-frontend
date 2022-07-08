@@ -1,11 +1,10 @@
 import Phaser from "phaser";
+import CountDownScene from "./CountDown";
 
 export default class Single extends Phaser.Scene {
   constructor() {
     super("single");
   }
-
-  init() {}
 
   preload() {
     this.load.spritesheet("alien", "textures/alienBeige_spritesheet.png", {
@@ -16,9 +15,20 @@ export default class Single extends Phaser.Scene {
       frameWidth: 1800,
       frameHeight: 750,
     });
+
+    const countDownScene = new CountDownScene(this.scene);
+    this.scene.add("CountDownScene", countDownScene, false);
   }
 
   create() {
+    //Timer
+    this.setTimer();
+
+    this.label = this.add.text(1000, 10, `Speed: 0`, {
+      fontSize: 32,
+      fontFamily: "roboto",
+    });
+
     this.anims.create({
       key: "treadmill-working",
       frames: [
@@ -64,7 +74,6 @@ export default class Single extends Phaser.Scene {
       .sprite(width * 0.5, height * 0.1, "alien")
       .setSize(50, 80)
       .setOffset(10, 10)
-      .setScale(1.5)
       .play("down-idle")
       .setGravityY(30000); //중력
 
@@ -72,7 +81,6 @@ export default class Single extends Phaser.Scene {
       .sprite(width * 0.5, height * 0.7, "treadmill")
       .setSize(1520, 100)
       .setOffset(120, 570)
-      .setScale(1.2)
       .play("treadmill-working-1");
 
     this.treadmill.setImmovable();
@@ -81,6 +89,18 @@ export default class Single extends Phaser.Scene {
   }
 
   update() {
+    // Timer
+    const calculateTime = (current) => {
+      const currentMinute = Math.floor((current / (1000 * 60)) % 60);
+      const currentSecond = Math.floor((current / 1000) % 60);
+      const currentMilliSecond = current.toString().substr(1, 2);
+
+      return `${currentMinute}:${currentSecond}:${currentMilliSecond}`;
+    };
+
+    this.countDown.setText(`Time: ${calculateTime(this.time.now)}`);
+
+    //Character Move Animation
     const speed = 500;
 
     this.input.on("wheel", () => {
@@ -98,5 +118,13 @@ export default class Single extends Phaser.Scene {
     if (this.treadmill.body.touching.up && this.player.body.touching.down) {
       this.player.body.position.add({ x: -3, y: 0 });
     }
+  }
+
+  //Timer
+  setTimer() {
+    this.countDown = this.add.text(100, 10, "Timer: ", {
+      fontSize: 32,
+      fontFamily: "roboto",
+    });
   }
 }
