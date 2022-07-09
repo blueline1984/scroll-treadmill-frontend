@@ -6,6 +6,10 @@ export default class Single extends Phaser.Scene {
     super("single");
   }
 
+  init() {
+    this.cursors = this.input.keyboard.createCursorKeys();
+  }
+
   preload() {
     this.load.spritesheet("alien", "textures/alienBeige_spritesheet.png", {
       frameWidth: 68,
@@ -24,6 +28,7 @@ export default class Single extends Phaser.Scene {
   }
 
   create() {
+    //identifier
     this.me = this.add.image(0, 5, "me");
 
     //Timer
@@ -72,17 +77,18 @@ export default class Single extends Phaser.Scene {
         start: 0,
         end: 1,
       }),
-      frameRate: 20,
+      frameRate: 10,
       repeat: -1,
     });
 
     const { width, height } = this.scale;
+
     this.player = this.physics.add
-      .sprite(width * 0.5, height * 0.1, "alien")
+      .sprite(width * 0.5, height * 0.5, "alien")
       .setSize(50, 80)
       .setOffset(10, 10)
       .play("down-idle")
-      .setGravityY(30000);
+      .setGravityY(500);
 
     this.treadmill = this.physics.add
       .sprite(width * 0.5, height * 0.7, "treadmill")
@@ -90,9 +96,15 @@ export default class Single extends Phaser.Scene {
       .setOffset(120, 570)
       .play("treadmill-working-1");
 
+    //Conveyor Belt
     this.treadmill.setImmovable();
-    this.surfaceSpeed = new Phaser.Math.Vector2(0.5, 0); //불필요할듯?
-    this.physics.add.collider(this.player, this.treadmill); //충돌 발생
+    this.surfaceSpeed = new Phaser.Math.Vector2(0.5, 0);
+
+    //Collide
+    this.physics.add.collider(this.player, this.treadmill);
+
+    //Character Max Velocity
+    this.player.body.maxVelocity.x = 500;
   }
 
   update() {
@@ -114,32 +126,43 @@ export default class Single extends Phaser.Scene {
       )} : ${Math.floor(this.newTime.getMilliseconds() / 10)}`
     );
 
-    //Character Velocity
+    //Show Character Velocity
     this.velocity.setText(
-      `Speed: ${
-        this.player.body.velocity.x /
-        Math.floor(this.newTime.getMilliseconds() / 10).toFixed(2)
-      } m/s`
+      `Speed: ${this.player.body.velocity.x.toFixed(1) / 10} m/s`
     );
 
-    //Character Move Animation
-    const speed = 500;
+    //Character Acceleration
+    this.player.setAcceleration(0);
+    this.player.setDrag(0);
 
     this.input.on("wheel", () => {
-      this.player.setVelocity(speed, 0);
+      this.player.body.acceleration.setToPolar(this.player.rotation, 30);
     });
 
+    if (!this.player.body.acceleration.x) {
+      this.player.body.setDrag(150);
+    }
+
+    // No wheel anmaiton stop
     if (this.player.body.velocity.x === 0) {
       this.player.play("alien-idle");
     } else {
       this.player.play("alien-walk-1", true);
     }
 
-    this.player.setVelocity(0, 0);
-
+    //Treadmill Velocity
     if (this.treadmill.body.touching.up && this.player.body.touching.down) {
-      this.player.body.position.add({ x: -5, y: 0 });
+      this.player.body.position.add({ x: -2, y: 0 });
     }
+
+    // if (this.cursors.up.isDown) {
+    //   this.player.body.acceleration.setToPolar(this.player.rotation, 50);
+    //   // this.player.setVelocity(this.player.body.speed, 0);
+    //   console.log(this.player.body.acceleration);
+    // } else {
+    //   //감속
+    //   this.player.body.setDrag(100);
+    // }
   }
 
   //Time Checker
