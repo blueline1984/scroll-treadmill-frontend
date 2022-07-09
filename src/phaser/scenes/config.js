@@ -9,7 +9,8 @@ const config = {
   parent: "phaser-container",
   backgroundColor: "#354259",
   scale: {
-    mode: Phaser.Scale.ScaleModes.NONE,
+    mode: Phaser.Scale.FIT,
+    // mode: Phaser.Scale.ScaleModes.NONE,
     width: window.innerWidth,
     height: window.innerHeight,
   },
