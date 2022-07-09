@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import CountDownScene from "./CountDown";
+import CountDown from "./CountDownScene";
 
 export default class Single extends Phaser.Scene {
   constructor() {
@@ -7,39 +7,25 @@ export default class Single extends Phaser.Scene {
   }
 
   init() {
-    this.cursors = this.input.keyboard.createCursorKeys();
-  }
-
-  preload() {
-    this.load.spritesheet("alien", "textures/alienBeige_spritesheet.png", {
-      frameWidth: 68,
-      frameHeight: 93,
-    });
-
-    this.load.spritesheet("treadmill", "textures/treadmill_spritesheet.png", {
-      frameWidth: 1800,
-      frameHeight: 750,
-    });
-
-    this.load.image("me", "textures/me.png");
-
-    const countDownScene = new CountDownScene(this.scene);
-    this.scene.add("CountDownScene", countDownScene, false);
+    this.cursors = this.input.keyboard.createCursorKeys(); //추후 삭제 필요
   }
 
   create() {
-    //identifier
-    this.me = this.add.image(0, 5, "me");
+    const countDownScene = new CountDown(this.scene);
+    this.scene.add("CountDownScene", countDownScene, true);
 
-    //Timer
-    this.setTimer();
-    this.stTime = new Date().getTime();
+    // Character Identifier
+    this.me = this.add.image(0, 5, "me");
 
     //Character Velocity
     this.velocity = this.add.text(1000, 10, `Speed: `, {
       fontSize: 32,
       fontFamily: "roboto",
     });
+
+    //Timer
+    this.setTimer();
+    this.stTime = new Date().getTime();
 
     this.anims.create({
       key: "treadmill-working",
@@ -108,7 +94,7 @@ export default class Single extends Phaser.Scene {
   }
 
   update() {
-    //identifier
+    // Character Identifier
     this.me.x = this.player.body.position.x + 30;
     this.me.y = this.player.body.position.y - 100;
 
@@ -126,7 +112,7 @@ export default class Single extends Phaser.Scene {
       )} : ${Math.floor(this.newTime.getMilliseconds() / 10)}`
     );
 
-    //Show Character Velocity
+    // Show Character Velocity
     this.velocity.setText(
       `Speed: ${this.player.body.velocity.x.toFixed(1) / 10} m/s`
     );
@@ -155,6 +141,7 @@ export default class Single extends Phaser.Scene {
       this.player.body.position.add({ x: -2, y: 0 });
     }
 
+    // **참고**
     // if (this.cursors.up.isDown) {
     //   this.player.body.acceleration.setToPolar(this.player.rotation, 50);
     //   // this.player.setVelocity(this.player.body.speed, 0);
@@ -165,7 +152,7 @@ export default class Single extends Phaser.Scene {
     // }
   }
 
-  //Time Checker
+  // Time Checker
   setTimer() {
     this.timer = this.add.text(100, 10, "Timer: ", {
       fontSize: 32,

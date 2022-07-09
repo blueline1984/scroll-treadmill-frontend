@@ -1,4 +1,6 @@
 import Phaser from "phaser";
+
+import Preloader from "./Preloader";
 import SinglePlay from "./SinglePlay";
 
 const config = {
@@ -19,7 +21,7 @@ const config = {
     },
   },
   autoFocus: true, //조사 필요
-  scene: [SinglePlay],
+  scene: [Preloader, SinglePlay],
 };
 
 export default config;
