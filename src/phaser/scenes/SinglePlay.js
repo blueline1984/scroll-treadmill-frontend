@@ -10,6 +10,9 @@ export default class Single extends Phaser.Scene {
   }
 
   create() {
+    // const countDownScene = new CountDown(this.scene);
+    // this.scene.add("CountDownScene", countDownScene, true);
+
     // Character Identifier
     this.me = this.add.image(0, 5, "me");
 
@@ -87,6 +90,11 @@ export default class Single extends Phaser.Scene {
 
     //Character Max Velocity
     this.player.body.maxVelocity.x = 500;
+
+    this.treadmillAcceleration = -1;
+
+    //Treadmill Speed up
+    this.speedTreadmill();
   }
 
   update() {
@@ -134,8 +142,9 @@ export default class Single extends Phaser.Scene {
 
     //Treadmill Velocity
     if (this.treadmill.body.touching.up && this.player.body.touching.down) {
-      this.player.body.position.add({ x: -2, y: 0 });
+      this.player.body.position.add({ x: this.treadmillAcceleration, y: 0 });
     }
+    console.log(this.treadmillAcceleration);
 
     // **참고**
     // if (this.cursors.up.isDown) {
@@ -154,5 +163,12 @@ export default class Single extends Phaser.Scene {
       fontSize: 32,
       fontFamily: "roboto",
     });
+  }
+
+  //Treadmill Speed up
+  speedTreadmill() {
+    window.setInterval(() => {
+      this.treadmillAcceleration -= 1;
+    }, 5000);
   }
 }

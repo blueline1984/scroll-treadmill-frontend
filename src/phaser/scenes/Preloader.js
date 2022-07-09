@@ -20,6 +20,11 @@ export default class Preloader extends Phaser.Scene {
   }
 
   create() {
+    // this.countDown();
+    this.scene.start("single");
+  }
+
+  countDown() {
     const { width, height } = this.scale;
 
     // this.cameras.main.fadeIn(500, 0, 0, 0);
