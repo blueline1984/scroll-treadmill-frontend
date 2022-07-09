@@ -1,5 +1,4 @@
 import Phaser from "phaser";
-import CountDown from "./CountDownScene";
 
 export default class Single extends Phaser.Scene {
   constructor() {
@@ -11,9 +10,6 @@ export default class Single extends Phaser.Scene {
   }
 
   create() {
-    const countDownScene = new CountDown(this.scene);
-    this.scene.add("CountDownScene", countDownScene, true);
-
     // Character Identifier
     this.me = this.add.image(0, 5, "me");
 
