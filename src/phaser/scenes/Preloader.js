@@ -20,6 +20,49 @@ export default class Preloader extends Phaser.Scene {
   }
 
   create() {
-    this.scene.start("single");
+    const { width, height } = this.scale;
+
+    // this.cameras.main.fadeIn(500, 0, 0, 0);
+
+    // this.cameras.main.setBackgroundColor("rgba(0, 0, 0, 0.5)");
+
+    this.countDownCount = 4;
+
+    this.text = this.add.text(width * 0.4, height * 0.4, "Ready", {
+      fontSize: "150px",
+      fontFamily: "MainFont",
+    });
+
+    this.interval = window.setInterval(() => {
+      this.countDownCount--;
+
+      if (this.text) {
+        this.text.destroy();
+      }
+
+      if (this.countDownCount === 0) {
+        this.text.destroy();
+        this.text = this.add.text(width * 0.4, height * 0.4, "Scorll !", {
+          fontSize: "150px",
+          fontFamily: "MainFont",
+        });
+      } else {
+        this.text = this.add.text(
+          width * 0.45,
+          height * 0.4,
+          this.countDownCount,
+          {
+            fontSize: "150px",
+            fontFamily: "MainFont",
+          }
+        );
+      }
+
+      if (this.countDownCount < 0) {
+        window.clearInterval(this.interval);
+
+        this.scene.start("single");
+      }
+    }, 1000);
   }
 }
