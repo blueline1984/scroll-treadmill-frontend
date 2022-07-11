@@ -21,6 +21,7 @@ function ModeSelection({ onBlindMode }) {
     <>
       {isSingleOpen && (
         <Modal
+          backgroudColor="#354259"
           onClose={closeModal}
           message={
             <>
@@ -34,6 +35,7 @@ function ModeSelection({ onBlindMode }) {
       )}
       {isMultiOpen && (
         <Modal
+          backgroudColor="#ADCF9F"
           onClose={closeModal}
           message={
             <>

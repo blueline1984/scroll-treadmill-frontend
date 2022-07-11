@@ -4,21 +4,23 @@ import styled from "styled-components";
 
 import Portal from "../Portal";
 
-function Modal({ message, onClose }) {
+function Modal({ message, onClose, backgroudColor, closeButton = true }) {
   return (
     <Portal>
       <ModalOverlay>
-        <ModalBody>
-          <MdClose
-            onClick={onClose}
-            style={{
-              background: "none",
-              position: "relative",
-              left: "95%",
-              cursor: "pointer",
-            }}
-            size={50}
-          />
+        <ModalBody style={{ backgroundColor: `${backgroudColor}` }}>
+          {closeButton && (
+            <MdClose
+              onClick={onClose}
+              style={{
+                backgroundColor: `${backgroudColor}`,
+                position: "relative",
+                left: "95%",
+                cursor: "pointer",
+              }}
+              size={50}
+            />
+          )}
           {message}
         </ModalBody>
       </ModalOverlay>
