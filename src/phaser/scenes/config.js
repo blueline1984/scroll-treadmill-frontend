@@ -25,7 +25,7 @@ const config = {
     },
   },
   autoFocus: true, //조사 필요
-  scene: [CharacterSelect, Preloader, SinglePlay],
+  scene: [CharacterSelect, Preloader, SinglePlay, GameOver],
 };
 
 export default config;
