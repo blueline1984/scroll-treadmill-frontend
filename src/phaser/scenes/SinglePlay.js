@@ -87,19 +87,22 @@ export default class Single extends Phaser.Scene {
       .setImmovable();
 
     //Game over zone
-    this.zone = this.add.zone(width * 0.1, height * 1).setSize(800, 100);
+    this.zone = this.add.zone(width * 0.1, height * 0.9).setSize(800, 100);
     this.physics.world.enable(this.zone);
     this.zone.body.setAllowGravity(false);
     this.zone.body.moves = false;
+
+    //Game over modal
     this.physics.add.overlap(this.player, this.zone, () => {
-      this.scene.launch("gameOver");
+      this.time.addEvent({
+        callback: () => {
+          this.physics.pause();
+          this.game.events.emit("gameOver");
+        },
+        callbackScope: this,
+        delay: 2000,
+      });
     });
-
-    this.playerBounds = this.player.getBounds();
-    this.zoneBounds = this.zone.getBounds();
-
-    this.playerVerticalLine = this.playerBounds.getLineB();
-    this.zoneHorizontalLine = this.zoneBounds.getLineC(); //Bottom Line
 
     //Conveyor Belt
     this.treadmill.setImmovable();
@@ -206,7 +209,7 @@ export default class Single extends Phaser.Scene {
 
     this.text = this.add.text(width * 0.4, height * 0.4, "Ready", {
       fontSize: "150px",
-      fontFamily: "Amatic SC",
+      fontFamily: "ActionJ",
     });
 
     this.interval = window.setInterval(() => {
@@ -220,7 +223,7 @@ export default class Single extends Phaser.Scene {
         this.text.destroy();
         this.text = this.add.text(width * 0.4, height * 0.4, "Scorll !", {
           fontSize: "150px",
-          fontFamily: "Amatic SC",
+          fontFamily: "ActionJ",
         });
       } else {
         this.text = this.add.text(
@@ -229,7 +232,7 @@ export default class Single extends Phaser.Scene {
           this.countDownCount,
           {
             fontSize: "150px",
-            fontFamily: "Amatic SC",
+            fontFamily: "ActionJ",
           }
         );
       }
