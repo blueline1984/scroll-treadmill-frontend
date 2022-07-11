@@ -1,6 +1,10 @@
 import Phaser from "phaser";
 
 export default class CharacterSelect extends Phaser.Scene {
+  constructor() {
+    super("characterSelect");
+  }
+
   preload() {
     this.load.image("alien1", "textures/alien1.png", {
       frameWidth: 100,
@@ -19,13 +23,17 @@ export default class CharacterSelect extends Phaser.Scene {
   }
 
   create() {
-    this.add.text(500, 100, "Character Selection", {
-      fontSize: "100px",
-      fontFamily: "Amatic SC",
-    });
-    this.player1 = this.add.image(100, 300, "alien1");
-    this.player2 = this.add.image(300, 300, "alien2");
-    this.player3 = this.add.image(500, 300, "alien3");
+    const { width, height } = this.scale;
+    this.add
+      .text(width * 0.5, height * 0.1, "Character Selection", {
+        fontSize: "100px",
+        fontFamily: "Amatic SC",
+      })
+      .setOrigin(0.5);
+
+    this.player1 = this.add.image(width * 0.3, height * 0.3, "alien1");
+    this.player2 = this.add.image(width * 0.5, height * 0.3, "alien2");
+    this.player3 = this.add.image(width * 0.7, height * 0.3, "alien3");
 
     this.player1.setInteractive();
     this.player2.setInteractive();

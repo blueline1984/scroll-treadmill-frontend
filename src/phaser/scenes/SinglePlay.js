@@ -1,11 +1,12 @@
 import Phaser from "phaser";
+import CountDownScene from "./CountDownScene";
 
 export default class Single extends Phaser.Scene {
   constructor() {
     super("single");
 
     //initial treadmill speed
-    this.treadmillAcceleration = -5;
+    this.treadmillAcceleration = -10;
   }
 
   init(data) {
@@ -13,8 +14,8 @@ export default class Single extends Phaser.Scene {
   }
 
   create() {
-    // const countDownScene = new CountDown(this.scene);
-    // this.scene.add("CountDownScene", countDownScene, true);
+    const countDownScene = new CountDownScene(this.scene);
+    this.scene.add("CountDownScene", countDownScene, true);
 
     // Character Identifier
     this.me = this.add.image(0, 5, "me");
@@ -182,7 +183,7 @@ export default class Single extends Phaser.Scene {
     });
   }
 
-  //Treadmill Speed up
+  //Treadmill Speed up 추후 변경해야함
   speedTreadmill() {
     window.setInterval(() => {
       this.treadmillAcceleration -= 1;
@@ -192,5 +193,52 @@ export default class Single extends Phaser.Scene {
   showGameOver() {
     this.physics.pause();
     this.scene.start("gameOver");
+  }
+
+  countDown() {
+    const { width, height } = this.scale;
+
+    // this.cameras.main.fadeIn(500, 0, 0, 0);
+
+    // this.cameras.main.setBackgroundColor("rgba(0, 0, 0, 0.5)");
+
+    this.countDownCount = 4;
+
+    this.text = this.add.text(width * 0.4, height * 0.4, "Ready", {
+      fontSize: "150px",
+      fontFamily: "Amatic SC",
+    });
+
+    this.interval = window.setInterval(() => {
+      this.countDownCount--;
+
+      if (this.text) {
+        this.text.destroy();
+      }
+
+      if (this.countDownCount === 0) {
+        this.text.destroy();
+        this.text = this.add.text(width * 0.4, height * 0.4, "Scorll !", {
+          fontSize: "150px",
+          fontFamily: "Amatic SC",
+        });
+      } else {
+        this.text = this.add.text(
+          width * 0.45,
+          height * 0.4,
+          this.countDownCount,
+          {
+            fontSize: "150px",
+            fontFamily: "Amatic SC",
+          }
+        );
+      }
+
+      if (this.countDownCount < 0) {
+        window.clearInterval(this.interval);
+
+        this.scene.start("single", { character: this.selectedCharacter });
+      }
+    }, 1000);
   }
 }
