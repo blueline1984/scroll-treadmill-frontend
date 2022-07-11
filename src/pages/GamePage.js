@@ -11,7 +11,11 @@ function GamePage() {
     };
   }, []);
 
-  return <div id="phaser-container"></div>;
+  return (
+    <>
+      <div id="phaser-container"></div>
+    </>
+  );
 }
 
 export default GamePage;

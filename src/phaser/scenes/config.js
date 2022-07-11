@@ -1,7 +1,9 @@
 import Phaser from "phaser";
 
+import CharacterSelect from "./CharacterSelect";
 import Preloader from "./Preloader";
 import SinglePlay from "./SinglePlay";
+import GameOver from "./GameOverScene";
 
 const config = {
   title: "Scroll Treadmill",
@@ -10,6 +12,7 @@ const config = {
   backgroundColor: "#354259",
   scale: {
     mode: Phaser.Scale.FIT,
+    // autoCenter: Phaser.Scale.CENTER_BOTH,
     // mode: Phaser.Scale.ScaleModes.NONE,
     width: window.innerWidth,
     height: window.innerHeight,
@@ -22,7 +25,7 @@ const config = {
     },
   },
   autoFocus: true, //조사 필요
-  scene: [Preloader, SinglePlay],
+  scene: [CharacterSelect, Preloader, SinglePlay],
 };
 
 export default config;

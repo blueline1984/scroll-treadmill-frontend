@@ -3,10 +3,13 @@ import Phaser from "phaser";
 export default class Single extends Phaser.Scene {
   constructor() {
     super("single");
+
+    //initial treadmill speed
+    this.treadmillAcceleration = -5;
   }
 
-  init() {
-    this.cursors = this.input.keyboard.createCursorKeys(); //추후 삭제 필요
+  init(data) {
+    this.selectedCharacter = data.character;
   }
 
   create() {
@@ -17,9 +20,9 @@ export default class Single extends Phaser.Scene {
     this.me = this.add.image(0, 5, "me");
 
     //Character Velocity
-    this.velocity = this.add.text(1000, 10, `Speed: `, {
-      fontSize: 32,
-      fontFamily: "roboto",
+    this.velocity = this.add.text(900, 30, `Speed `, {
+      fontSize: "70px",
+      fontFamily: "Amatic SC",
     });
 
     //Timer
@@ -79,19 +82,33 @@ export default class Single extends Phaser.Scene {
       .sprite(width * 0.5, height * 0.7, "treadmill")
       .setSize(1520, 100)
       .setOffset(120, 570)
-      .play("treadmill-working-1");
+      .play("treadmill-working-1")
+      .setImmovable();
+
+    //Game over zone
+    this.zone = this.add.zone(width * 0.1, height * 1).setSize(800, 100);
+    this.physics.world.enable(this.zone);
+    this.zone.body.setAllowGravity(false);
+    this.zone.body.moves = false;
+    this.physics.add.overlap(this.player, this.zone, () => {
+      this.scene.launch("gameOver");
+    });
+
+    this.playerBounds = this.player.getBounds();
+    this.zoneBounds = this.zone.getBounds();
+
+    this.playerVerticalLine = this.playerBounds.getLineB();
+    this.zoneHorizontalLine = this.zoneBounds.getLineC(); //Bottom Line
 
     //Conveyor Belt
     this.treadmill.setImmovable();
     this.surfaceSpeed = new Phaser.Math.Vector2(0.5, 0);
 
-    //Collide
+    //Collide Treadmill and Player
     this.physics.add.collider(this.player, this.treadmill);
 
     //Character Max Velocity
     this.player.body.maxVelocity.x = 500;
-
-    this.treadmillAcceleration = -1;
 
     //Treadmill Speed up
     this.speedTreadmill();
@@ -111,14 +128,14 @@ export default class Single extends Phaser.Scene {
     }
 
     this.timer.setText(
-      `Time: ${addZero(this.newTime.getMinutes())} : ${addZero(
+      `Time   ${addZero(this.newTime.getMinutes())} : ${addZero(
         this.newTime.getSeconds()
       )} : ${Math.floor(this.newTime.getMilliseconds() / 10)}`
     );
 
     // Show Character Velocity
     this.velocity.setText(
-      `Speed: ${this.player.body.velocity.x.toFixed(1) / 10} m/s`
+      `Speed   ${this.player.body.velocity.x.toFixed(1) / 10}`
     );
 
     //Character Acceleration
@@ -141,10 +158,10 @@ export default class Single extends Phaser.Scene {
     }
 
     //Treadmill Velocity
+    // console.log(this.player.body.touching.)
     if (this.treadmill.body.touching.up && this.player.body.touching.down) {
       this.player.body.position.add({ x: this.treadmillAcceleration, y: 0 });
     }
-    console.log(this.treadmillAcceleration);
 
     // **참고**
     // if (this.cursors.up.isDown) {
@@ -159,9 +176,9 @@ export default class Single extends Phaser.Scene {
 
   // Time Checker
   setTimer() {
-    this.timer = this.add.text(100, 10, "Timer: ", {
-      fontSize: 32,
-      fontFamily: "roboto",
+    this.timer = this.add.text(50, 30, "Time ", {
+      fontSize: "65px",
+      fontFamily: "Amatic SC",
     });
   }
 
@@ -170,5 +187,10 @@ export default class Single extends Phaser.Scene {
     window.setInterval(() => {
       this.treadmillAcceleration -= 1;
     }, 5000);
+  }
+
+  showGameOver() {
+    this.physics.pause();
+    this.scene.start("gameOver");
   }
 }
