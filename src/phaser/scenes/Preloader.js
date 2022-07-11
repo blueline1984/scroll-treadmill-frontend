@@ -32,7 +32,6 @@ export default class Preloader extends Phaser.Scene {
 
     //loading
     this.load.on("progress", this.updateLoading, {
-      progressContainer: this.progressContainer,
       loadingText: this.loadingText,
     });
 
@@ -45,21 +44,10 @@ export default class Preloader extends Phaser.Scene {
 
   //loading
   setLoading() {
-    this.progressContainer = this.add.graphics();
-    this.progressBar = this.add.graphics();
-
     const { width, height } = this.scale;
-    const loadingBar = new Phaser.Geom.Rectangle(320, 370, 400, 50);
-    const loadingBarContainer = new Phaser.Geom.Rectangle(325, 375, 290, 40);
-
-    this.progressBar.fillRectShape(loadingBar);
-    this.progressBar.fillStyle(0xffffff, 1);
-
-    this.progressContainer.fillRectShape(loadingBarContainer);
-    this.progressContainer.fillStyle(354259, 1);
 
     this.loadingText = this.add
-      .text(width * 0.5, height * 0.4, "Loading...Inbeen testing", {
+      .text(width * 0.5, height * 0.4, "Loading...", {
         fontSize: "200px",
         fill: "#FFFFFF",
         fontFamily: "Amatic SC",
@@ -68,12 +56,6 @@ export default class Preloader extends Phaser.Scene {
   }
 
   updateLoading(percentage) {
-    this.progressContainer.clear();
-    this.progressContainer.fillStyle(0xedf335, 1);
-    this.progressContainer.fillRectShape(
-      new Phaser.Geom.Rectangle(325, 375, percentage * 390, 40)
-    );
-    percentage = percentage * 100;
     this.loadingText.setText(`Loading... ${percentage.toFixed(0)}%`);
   }
 
