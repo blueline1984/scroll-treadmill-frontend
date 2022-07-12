@@ -6,7 +6,7 @@ export default class Single extends Phaser.Scene {
     super("single");
 
     //initial treadmill speed
-    this.treadmillAcceleration = -10;
+    this.treadmillAcceleration = -5;
   }
 
   init(data) {
@@ -16,9 +16,6 @@ export default class Single extends Phaser.Scene {
   create() {
     const countDownScene = new CountDownScene(this.scene);
     this.scene.add("CountDownScene", countDownScene, true);
-
-    // Character Identifier
-    this.me = this.add.image(0, 5, "me");
 
     //Character Velocity
     this.velocity = this.add.text(900, 30, `Speed `, {
@@ -72,11 +69,13 @@ export default class Single extends Phaser.Scene {
 
     const { width, height } = this.scale;
 
+    // Character Identifier
+    this.me = this.add.image(width * 0.5, height * 0.38, "me");
+
     this.player = this.physics.add
       .sprite(width * 0.5, height * 0.5, "alien")
       .setSize(50, 80)
       .setOffset(10, 10)
-      .play("down-idle")
       .setGravityY(500);
 
     this.treadmill = this.physics.add
@@ -87,7 +86,7 @@ export default class Single extends Phaser.Scene {
       .setImmovable();
 
     //Game over zone
-    this.zone = this.add.zone(width * 0.1, height * 0.9).setSize(800, 100);
+    this.zone = this.add.zone(width * 0.1, height).setSize(800, 100);
     this.physics.world.enable(this.zone);
     this.zone.body.setAllowGravity(false);
     this.zone.body.moves = false;
@@ -96,11 +95,13 @@ export default class Single extends Phaser.Scene {
     this.physics.add.overlap(this.player, this.zone, () => {
       this.time.addEvent({
         callback: () => {
-          this.physics.pause();
           this.game.events.emit("gameOver");
+
+          this.scene.pause();
+          console.log("phaser die");
         },
         callbackScope: this,
-        delay: 2000,
+        delay: 1000,
       });
     });
 
@@ -162,7 +163,6 @@ export default class Single extends Phaser.Scene {
     }
 
     //Treadmill Velocity
-    // console.log(this.player.body.touching.)
     if (this.treadmill.body.touching.up && this.player.body.touching.down) {
       this.player.body.position.add({ x: this.treadmillAcceleration, y: 0 });
     }
@@ -191,57 +191,5 @@ export default class Single extends Phaser.Scene {
     window.setInterval(() => {
       this.treadmillAcceleration -= 1;
     }, 5000);
-  }
-
-  showGameOver() {
-    this.physics.pause();
-    this.scene.start("gameOver");
-  }
-
-  countDown() {
-    const { width, height } = this.scale;
-
-    // this.cameras.main.fadeIn(500, 0, 0, 0);
-
-    // this.cameras.main.setBackgroundColor("rgba(0, 0, 0, 0.5)");
-
-    this.countDownCount = 4;
-
-    this.text = this.add.text(width * 0.4, height * 0.4, "Ready", {
-      fontSize: "150px",
-      fontFamily: "ActionJ",
-    });
-
-    this.interval = window.setInterval(() => {
-      this.countDownCount--;
-
-      if (this.text) {
-        this.text.destroy();
-      }
-
-      if (this.countDownCount === 0) {
-        this.text.destroy();
-        this.text = this.add.text(width * 0.4, height * 0.4, "Scorll !", {
-          fontSize: "150px",
-          fontFamily: "ActionJ",
-        });
-      } else {
-        this.text = this.add.text(
-          width * 0.45,
-          height * 0.4,
-          this.countDownCount,
-          {
-            fontSize: "150px",
-            fontFamily: "ActionJ",
-          }
-        );
-      }
-
-      if (this.countDownCount < 0) {
-        window.clearInterval(this.interval);
-
-        this.scene.start("single", { character: this.selectedCharacter });
-      }
-    }, 1000);
   }
 }
