@@ -9,7 +9,7 @@ export default class CountDownScene extends Phaser.Scene {
 
   preload() {
     this.text = this.add.text(500, 500, "", {
-      fontFamily: "ActionJ",
+      fontFamily: "ActionJ", //임의 생성
     });
   }
 
