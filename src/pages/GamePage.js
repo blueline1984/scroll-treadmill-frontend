@@ -19,7 +19,6 @@ function GamePage() {
 
     game.events.on("gameOver", () => {
       setResultState(true);
-      console.log("die");
     });
 
     return () => {
