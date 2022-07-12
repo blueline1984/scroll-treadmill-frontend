@@ -7,6 +7,7 @@ export default class Single extends Phaser.Scene {
 
     //initial treadmill speed
     this.treadmillAcceleration = -3;
+    this.count = 0;
   }
 
   init(data) {
@@ -19,6 +20,11 @@ export default class Single extends Phaser.Scene {
 
     //Character Velocity
     this.velocity = this.add.text(800, 30, `Speed `, {
+      fontSize: "70px",
+      fontFamily: "Amatic SC",
+    });
+
+    this.counter = this.add.text(1300, 30, `Mouse Scroll `, {
       fontSize: "70px",
       fontFamily: "Amatic SC",
     });
@@ -142,6 +148,7 @@ export default class Single extends Phaser.Scene {
       "wheel",
       throttle(() => {
         this.count += 1;
+        console.log(this.count);
         this.player.body.acceleration.setToPolar(this.player.rotation, 1200);
       }, 90),
       { capture: true, passive: true }
@@ -166,6 +173,9 @@ export default class Single extends Phaser.Scene {
         this.newTime.getSeconds()
       )} : ${Math.floor(this.newTime.getMilliseconds() / 10)}`
     );
+
+    // Show Mouse Scroll
+    this.counter.setText(`Mouse Scroll   ${this.count}`);
 
     // Show Character Velocity
     this.velocity.setText(
