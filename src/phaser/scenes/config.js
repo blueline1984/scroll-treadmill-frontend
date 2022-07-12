@@ -1,16 +1,20 @@
 import Phaser from "phaser";
-import Single from "./SinglePlay";
+
+import CharacterSelect from "./CharacterSelect";
+import Preloader from "./Preloader";
+import SinglePlay from "./SinglePlay";
 
 const config = {
+  title: "Scroll Treadmill",
   type: Phaser.AUTO,
-  width: window.innerWidth,
-  height: window.innerHeight,
-  scale: {
-    mode: Phaser.Scale.FIT,
-    autoCenter: Phaser.Scale.CENTER,
-  },
   parent: "phaser-container",
   backgroundColor: "#354259",
+  scale: {
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+    width: window.innerWidth,
+    height: window.innerHeight,
+  },
   physics: {
     default: "arcade",
     arcade: {
@@ -18,7 +22,7 @@ const config = {
       debug: true,
     },
   },
-  scene: [Single],
+  scene: [CharacterSelect, Preloader, SinglePlay],
 };
 
 export default config;
