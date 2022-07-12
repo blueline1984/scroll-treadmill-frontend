@@ -6,7 +6,7 @@ export default class Single extends Phaser.Scene {
     super("single");
 
     //initial treadmill speed
-    this.treadmillAcceleration = -5;
+    this.treadmillAcceleration = -10;
   }
 
   init(data) {
@@ -27,6 +27,8 @@ export default class Single extends Phaser.Scene {
     this.setTimer();
     this.stTime = new Date().getTime();
 
+    //Character Animation
+    //Treadmill
     this.anims.create({
       key: "treadmill-working",
       frames: [
@@ -47,6 +49,7 @@ export default class Single extends Phaser.Scene {
       repeat: -1,
     });
 
+    //Alien
     this.anims.create({
       key: "alien-idle",
       frames: [
@@ -186,7 +189,7 @@ export default class Single extends Phaser.Scene {
     });
   }
 
-  //Treadmill Speed up 추후 변경해야함
+  //Treadmill Speed Setting 추후 변경해야함
   speedTreadmill() {
     window.setInterval(() => {
       this.treadmillAcceleration -= 1;
