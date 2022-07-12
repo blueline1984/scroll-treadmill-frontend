@@ -6,7 +6,8 @@ export default class Single extends Phaser.Scene {
     super("single");
 
     //initial treadmill speed
-    this.treadmillAcceleration = -10;
+    this.treadmillAcceleration = -3;
+    this.count = 0;
   }
 
   init(data) {
@@ -18,7 +19,12 @@ export default class Single extends Phaser.Scene {
     this.scene.add("CountDownScene", countDownScene, true);
 
     //Character Velocity
-    this.velocity = this.add.text(900, 30, `Speed `, {
+    this.velocity = this.add.text(800, 30, `Speed `, {
+      fontSize: "70px",
+      fontFamily: "Amatic SC",
+    });
+
+    this.counter = this.add.text(1300, 30, `Mouse Scroll `, {
       fontSize: "70px",
       fontFamily: "Amatic SC",
     });
@@ -120,6 +126,33 @@ export default class Single extends Phaser.Scene {
 
     //Treadmill Speed up
     this.speedTreadmill();
+
+    //Character mouse wheel event
+    const canvasElement =
+      document.body.childNodes[1].childNodes[0].childNodes[0];
+
+    const throttle = (callback, limit) => {
+      let waiting = false;
+      return () => {
+        if (!waiting) {
+          callback.apply(this, arguments);
+          waiting = true;
+          setTimeout(() => {
+            waiting = false;
+          }, limit);
+        }
+      };
+    };
+
+    canvasElement.addEventListener(
+      "wheel",
+      throttle(() => {
+        this.count += 1;
+        console.log(this.count);
+        this.player.body.acceleration.setToPolar(this.player.rotation, 1200);
+      }, 90),
+      { capture: true, passive: true }
+    );
   }
 
   update() {
@@ -141,6 +174,9 @@ export default class Single extends Phaser.Scene {
       )} : ${Math.floor(this.newTime.getMilliseconds() / 10)}`
     );
 
+    // Show Mouse Scroll
+    this.counter.setText(`Mouse Scroll   ${this.count}`);
+
     // Show Character Velocity
     this.velocity.setText(
       `Speed   ${this.player.body.velocity.x.toFixed(1) / 10}`
@@ -150,9 +186,13 @@ export default class Single extends Phaser.Scene {
     this.player.setAcceleration(0);
     this.player.setDrag(0);
 
-    this.input.on("wheel", () => {
-      this.player.body.acceleration.setToPolar(this.player.rotation, 30);
-    });
+    // this.input.addListener(
+    //   "wheel",
+    //   () => {
+    //     this.player.body.acceleration.setToPolar(this.player.rotation, 100);
+    //     console.log("wheel");
+    //   }
+    // );
 
     if (!this.player.body.acceleration.x) {
       this.player.body.setDrag(150);
@@ -189,7 +229,7 @@ export default class Single extends Phaser.Scene {
     });
   }
 
-  //Treadmill Speed Setting 추후 변경해야함
+  //Treadmill Speed Setting
   speedTreadmill() {
     window.setInterval(() => {
       this.treadmillAcceleration -= 1;
