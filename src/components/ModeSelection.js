@@ -6,17 +6,25 @@ import styled from "styled-components";
 function ModeSelection({ onBlindMode }) {
   const [isSingleOpen, setIsSingleOpen] = useState(false);
   const [isMultiOpen, setIsMultiOpen] = useState(false);
+  const [isCreateRoomOpen, setIsCreateRoomOpen] = useState(false);
   const navigate = useNavigate();
 
   const openSingleModal = () => {
     setIsSingleOpen(true);
   };
+
   const openMultiModal = () => {
     setIsMultiOpen(true);
   };
+
   const closeModal = () => {
     setIsSingleOpen(false);
     setIsMultiOpen(false);
+    setIsCreateRoomOpen(false);
+  };
+
+  const openCreateRoomModal = () => {
+    setIsCreateRoomOpen(true);
   };
 
   return (
@@ -48,8 +56,30 @@ function ModeSelection({ onBlindMode }) {
           message={
             <>
               <h1>Multi Play</h1>
-              <button>Create A Room</button>
+              <button onClick={openCreateRoomModal}>Create A Room</button>
               <button>Room Lists</button>
+              {isCreateRoomOpen && (
+                <Modal
+                  onClose={closeModal}
+                  backgroudColor="#ADCF9F"
+                  message={
+                    <>
+                      <h1>Create Room</h1>
+                      <form id="room">
+                        <label htmlFor="title">Room's Title :</label>
+                        <input type="text" id="title"></input>
+                        <label htmlFor="player">Players :</label>
+                        <select id="cars" name="player" form="room">
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                        </select>
+                        <button>방만들기</button>
+                      </form>
+                    </>
+                  }
+                />
+              )}
             </>
           }
         />
