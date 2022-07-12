@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Modal from "./Modal";
 import styled from "styled-components";
 
 function ModeSelection({ onBlindMode }) {
   const [isSingleOpen, setIsSingleOpen] = useState(false);
   const [isMultiOpen, setIsMultiOpen] = useState(false);
+  const navigate = useNavigate();
 
   const openSingleModal = () => {
     setIsSingleOpen(true);
@@ -26,7 +28,13 @@ function ModeSelection({ onBlindMode }) {
           message={
             <>
               <h1>Single Play</h1>
-              <button>Easy</button>
+              <button
+                onClick={() => {
+                  navigate("/game");
+                }}
+              >
+                Easy
+              </button>
               <button>Normal</button>
               <button>Hard</button>
             </>
