@@ -1,13 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 
 import { socket } from "../utils/socket";
 
 function RoomListPage() {
+  const [joinRoom, setJoinRoom] = useState("");
   const [roomLists, setRoomLists] = useState({});
   const [participantNum, setParticipantNum] = useState(0);
 
   const navigate = useNavigate();
+
+  //해당 방에 참가
+  const handleJoinRoom = (roomId) => {
+    if (!joinRoom) {
+      socket.emit("joinRoom", joinRoom);
+      navigate(`/waitingroom/${roomId}`);
+    }
+  };
 
   //만들어진 방 목록 받기
   useEffect(() => {
@@ -28,13 +37,14 @@ function RoomListPage() {
       </button>
       <div>
         {Object.keys(roomLists).map((roomId) => (
-          <div key={roomId} style={{ border: "solid 1px black" }}>
-            <h2>{roomLists[roomId].roomTitle}</h2>
-            <h2>
+          <li key={roomId} style={{ border: "solid 1px black" }}>
+            <p>{roomLists[roomId].roomTitle}</p>
+            <p>
               {participantNum} / {roomLists[roomId].roomMaxNum}
-            </h2>
-            <button>Join Button</button>
-          </div>
+            </p>
+            {/* <Link to={`/waitingroom/${roomId}`}>button</Link> */}
+            <button onClick={() => handleJoinRoom(roomId)}>Join Button</button>
+          </li>
         ))}
       </div>
     </>
