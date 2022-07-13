@@ -4,9 +4,7 @@ import { socket } from "../utils/socket";
 
 function RoomCreation() {
   const [roomTitle, setRoomTitle] = useState("");
-  const [roomLists, setRoomLists] = useState({});
   const navigate = useNavigate();
-  console.log(roomLists);
 
   const handleInputChange = (event) => {
     setRoomTitle(event.target.value);
@@ -17,11 +15,6 @@ function RoomCreation() {
     socket.emit("makeRoom", roomTitle);
     navigate("/roomlist");
   };
-
-  //만들어진 방 목록 받기
-  socket.on("roomList", (list) => {
-    setRoomLists(list);
-  });
 
   return (
     <>
