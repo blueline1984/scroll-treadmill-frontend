@@ -5,6 +5,8 @@ import { socket } from "../utils/socket";
 
 function RoomListPage() {
   const [roomLists, setRoomLists] = useState({});
+  const [participantNum, setParticipantNum] = useState(0);
+
   const navigate = useNavigate();
 
   //만들어진 방 목록 받기
@@ -24,15 +26,17 @@ function RoomListPage() {
       >
         Back To Main
       </button>
-      <p>
+      <div>
         {Object.keys(roomLists).map((roomId) => (
-          <p key={roomId} style={{ border: "solid 1px black" }}>
+          <div key={roomId} style={{ border: "solid 1px black" }}>
             <h2>{roomLists[roomId].roomTitle}</h2>
-            <h2>Participant Number</h2>
+            <h2>
+              {participantNum} / {roomLists[roomId].roomMaxNum}
+            </h2>
             <button>Join Button</button>
-          </p>
+          </div>
         ))}
-      </p>
+      </div>
     </>
   );
 }
