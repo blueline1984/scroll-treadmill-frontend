@@ -1,8 +1,19 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
+import { socket } from "../utils/socket";
+
 function RoomListPage() {
   const navigate = useNavigate();
+
+  console.log(socket.id);
+
+  console.log(
+    socket.on("currentPlayerss", (players) => {
+      console.log(players);
+    })
+  );
+
   return (
     <>
       <div>RoomListPage</div>
