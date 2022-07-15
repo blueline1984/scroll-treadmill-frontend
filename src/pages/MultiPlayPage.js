@@ -7,11 +7,11 @@ function MultiPlayPage() {
   useEffect(() => {
     const game = new Phaser.Game(config);
     return () => {
-      game.destroy();
+      game.destroy(true, true);
     };
   }, []);
 
-  return <div id="phaser-container">MultiPlayPage</div>;
+  return <div id="phaser-container"></div>;
 }
 
 export default MultiPlayPage;
