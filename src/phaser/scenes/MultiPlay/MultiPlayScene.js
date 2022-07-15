@@ -8,24 +8,57 @@ export default class Multi extends Phaser.Scene {
   }
 
   preload() {
+    //Alien
+    this.load.spritesheet("alien", `textures/alien1_spritesheet.png`, {
+      frameWidth: 68,
+      frameHeight: 93,
+    });
+
+    //Treadmill
     this.load.spritesheet("treadmill", "textures/treadmill_spritesheet.png", {
       frameWidth: 1800,
       frameHeight: 750,
-    });
-
-    socket.on("newPlayer", (data) => {
-      console.log(data.id, data.x, data.y);
     });
   }
 
   create() {
     socket.emit("newPlayer");
-    socket.on("newPlayer", (data) =>
-      console.log("newPlayer", data.id, data.x, data.y)
-    );
+    socket.on("newPlayer", (data) => console.log("newPlayer", data));
     socket.on("allplayers", (data) => console.log("allplayers", data));
 
-    //Treadmill
+    //Alien - animation
+    this.anims.create({
+      key: "alien-idle",
+      frames: [
+        {
+          key: "alien",
+          frame: 0,
+        },
+      ],
+    });
+
+    this.anims.create({
+      key: "alien-walk-1",
+      frames: this.anims.generateFrameNumbers("alien", {
+        start: 0,
+        end: 1,
+      }),
+      frameRate: 10,
+      repeat: -1,
+    });
+
+    socket.on("newPlayer", (player) => {
+      this.player = this.physics.add
+        .sprite(player.x, player.y, "alien")
+        .setSize(50, 80)
+        .setOffset(10, 10)
+        .setGravityY(500);
+
+      //Collide Treadmill and Player
+      this.physics.add.collider(this.player, this.treadmill);
+    });
+
+    //Treadmill - animation
     this.anims.create({
       key: "treadmill-working",
       frames: [
@@ -52,6 +85,10 @@ export default class Multi extends Phaser.Scene {
       .setOffset(120, 570)
       .play("treadmill-working-1")
       .setImmovable();
+
+    //Conveyor Belt
+    this.treadmill.setImmovable();
+    this.surfaceSpeed = new Phaser.Math.Vector2(0.5, 0);
   }
 
   update() {}
