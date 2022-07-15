@@ -1,14 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
 import { socket } from "../utils/socket";
-
-import { roomlistState } from "../states/roomlist";
 
 function RoomCreation() {
   const [roomTitle, setRoomTitle] = useState("");
-  const roomListRecoil = useRecoilValue(roomlistState);
-  console.log("여기에요", roomListRecoil);
 
   const navigate = useNavigate();
 
@@ -21,7 +16,7 @@ function RoomCreation() {
       alert("Please,Insert Room Title");
     } else {
       socket.emit("makeRoom", roomTitle);
-      navigate("/main");
+      navigate("/roomlist");
     }
   };
 
