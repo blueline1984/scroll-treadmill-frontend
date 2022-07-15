@@ -9,9 +9,9 @@ const config = {
   backgroundColor: "#ADCF9F",
   scale: {
     mode: Phaser.Scale.FIT,
-    autoCenter: Phaser.Scale.CENTER_BOTH,
-    width: window.innerWidth,
-    height: window.innerHeight,
+    // autoCenter: Phaser.Scale.CENTER_BOTH,
+    width: 1920,
+    height: 1080,
   },
   physics: {
     default: "arcade",
@@ -20,7 +20,7 @@ const config = {
       debug: true,
     },
   },
-  scene: [Preloader, MultiPlayScene],
+  scene: [MultiPlayScene],
 };
 
 export default config;
