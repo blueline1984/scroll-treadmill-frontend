@@ -29,6 +29,10 @@ function ModeSelection({ onBlindMode }) {
     setIsCreateRoomOpen(true);
   };
 
+  const onMoveToRoomListPage = () => {
+    navigate("/roomlist");
+  };
+
   return (
     <>
       {isSingleOpen && (
@@ -59,13 +63,7 @@ function ModeSelection({ onBlindMode }) {
             <>
               <h1>Multi Play</h1>
               <button onClick={openCreateRoomModal}>Create A Room</button>
-              <button
-                onClick={() => {
-                  navigate("/roomlist");
-                }}
-              >
-                Room Lists
-              </button>
+              <button onClick={onMoveToRoomListPage}>Room Lists</button>
               {isCreateRoomOpen && (
                 <Modal
                   onClose={closeModal}
