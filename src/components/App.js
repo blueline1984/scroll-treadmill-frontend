@@ -9,6 +9,7 @@ import MainPage from "../pages/MainPage";
 import GamePage from "../pages/GamePage";
 import MultiPlayPage from "../pages/MultiPlayPage";
 import RoomListPage from "../pages/RoomListPage";
+import WaitingPage from "../pages/WaitingPage";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/game" element={<GamePage />} />
         <Route path="/multi" element={<MultiPlayPage />} />
         <Route path="/roomlist" element={<RoomListPage />} />
+        <Route path="/waitingroom/:roomId" element={<WaitingPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
