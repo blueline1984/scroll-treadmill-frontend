@@ -1,7 +1,5 @@
 import Phaser from "phaser";
-import { useState, useEffect } from "react";
-
-import Modal from "../components/Modal";
+import { useEffect } from "react";
 
 import config from "../phaser/scenes/MultiPlay/config";
 
