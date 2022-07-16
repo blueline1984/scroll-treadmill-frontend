@@ -4,7 +4,13 @@ import styled from "styled-components";
 
 import Portal from "../Portal";
 
-function Modal({ message, onClose, backgroudColor, closeButton = true }) {
+function Modal({
+  message,
+  onClose,
+  backgroudColor,
+  closeButton = true,
+  informationContent,
+}) {
   return (
     <Portal>
       <ModalOverlay>
@@ -23,6 +29,7 @@ function Modal({ message, onClose, backgroudColor, closeButton = true }) {
             />
           )}
           <ModalContent>{message}</ModalContent>
+          {informationContent}
         </ModalBody>
       </ModalOverlay>
     </Portal>
@@ -57,8 +64,6 @@ const ModalContent = styled.div`
   padding: 0 5% 5% 5%;
   margin-left: auto;
   margin-right: auto;
-  background-color: "#354259";
-  color: "#fff";
   width: 40%;
   align-items: center;
   text-align: center;
