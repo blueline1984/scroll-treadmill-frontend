@@ -24,6 +24,7 @@ export default class CharacterSelect extends Phaser.Scene {
 
   create() {
     const { width, height } = this.scale;
+    console.log(this.scale);
     this.add
       .text(width * 0.5, height * 0.1, "Character Selection", {
         fontSize: "100px",
@@ -31,13 +32,23 @@ export default class CharacterSelect extends Phaser.Scene {
       })
       .setOrigin(0.5);
 
-    this.player1 = this.add.image(width * 0.3, height * 0.3, "alien1");
-    this.player2 = this.add.image(width * 0.5, height * 0.3, "alien2");
-    this.player3 = this.add.image(width * 0.7, height * 0.3, "alien3");
+    this.player1 = this.add
+      .sprite(width * 0.3, height * 0.3, "alien1")
+      .setAlpha(0.5)
+      .setInteractive()
+      .setScale(1.5, 1.5);
 
-    this.player1.setInteractive();
-    this.player2.setInteractive();
-    this.player3.setInteractive();
+    this.player2 = this.add
+      .image(width * 0.5, height * 0.3, "alien2")
+      .setAlpha(0.5)
+      .setInteractive()
+      .setScale(1.5, 1.5);
+
+    this.player3 = this.add
+      .image(width * 0.7, height * 0.3, "alien3")
+      .setAlpha(0.5)
+      .setInteractive()
+      .setScale(1.5, 1.5);
 
     this.player1.on(
       "pointerdown",
@@ -46,6 +57,7 @@ export default class CharacterSelect extends Phaser.Scene {
       },
       this
     );
+
     this.player2.on(
       "pointerdown",
       () => {
@@ -60,6 +72,31 @@ export default class CharacterSelect extends Phaser.Scene {
       },
       this
     );
+
+    //character selection hover
+    this.player1.on("pointerover", () => {
+      this.player1.setAlpha(1);
+    });
+
+    this.player1.on("pointerout", () => {
+      this.player1.setAlpha(0.5);
+    });
+
+    this.player2.on("pointerover", () => {
+      this.player2.setAlpha(1);
+    });
+
+    this.player2.on("pointerout", () => {
+      this.player2.setAlpha(0.5);
+    });
+
+    this.player3.on("pointerover", () => {
+      this.player3.setAlpha(1);
+    });
+
+    this.player3.on("pointerout", () => {
+      this.player3.setAlpha(0.5);
+    });
 
     this.input.on("pointerdown", this.handleContinue, this);
   }
