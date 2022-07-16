@@ -14,6 +14,7 @@ function Modal({ message, onClose, backgroudColor, closeButton = true }) {
               onClick={onClose}
               style={{
                 backgroundColor: `${backgroudColor}`,
+                color: "white",
                 position: "relative",
                 left: "95%",
                 cursor: "pointer",
@@ -21,7 +22,7 @@ function Modal({ message, onClose, backgroudColor, closeButton = true }) {
               size={50}
             />
           )}
-          {message}
+          <ModalContent>{message}</ModalContent>
         </ModalBody>
       </ModalOverlay>
     </Portal>
@@ -48,6 +49,36 @@ const ModalBody = styled.div`
   padding: 10px;
   zindex: 1000;
   border: 2px solid white;
+`;
+
+const ModalContent = styled.div`
+  display: block;
+  justify-content: center;
+  padding: 0 5% 5% 5%;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: "#354259";
+  color: "#fff";
+  width: 40%;
+  align-items: center;
+  text-align: center;
+
+  h1 {
+    border-bottom: 1px solid #fff;
+    border-spacing: 5px 1rem;
+    margin-bottom: 7%;
+    font-size: 70px;
+    color: #fff;
+  }
+
+  button {
+    margin: 3%;
+    border: 1px solid #fff;
+    padding: 10px 15px;
+    width: 70%;
+    font-size: 35px;
+    color: #fff;
+  }
 `;
 
 export default Modal;

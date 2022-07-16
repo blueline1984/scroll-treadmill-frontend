@@ -11,6 +11,10 @@ function ModeSelection({ onBlindMode }) {
   const [isCreateRoomOpen, setIsCreateRoomOpen] = useState(false);
   const navigate = useNavigate();
 
+  const onMoveToSingleGame = () => {
+    navigate("/game");
+  };
+
   const openSingleModal = () => {
     setIsSingleOpen(true);
   };
@@ -37,33 +41,33 @@ function ModeSelection({ onBlindMode }) {
     <>
       {isSingleOpen && (
         <Modal
+          closeButton={false}
           backgroudColor="#354259"
           onClose={closeModal}
           message={
             <>
               <h1>Single Play</h1>
-              <button
-                onClick={() => {
-                  navigate("/game");
-                }}
-              >
-                Easy
-              </button>
-              <button>Normal</button>
-              <button>Hard</button>
+              <SingleButtonWrapper>
+                <button onClick={onMoveToSingleGame}>Start Game</button>
+                <button onClick={closeModal}>Cancle</button>
+              </SingleButtonWrapper>
             </>
           }
         />
       )}
       {isMultiOpen && (
         <Modal
+          closeButton={false}
           backgroudColor="#ADCF9F"
           onClose={closeModal}
           message={
             <>
               <h1>Multi Play</h1>
-              <button onClick={openCreateRoomModal}>Create A Room</button>
-              <button onClick={onMoveToRoomListPage}>Room Lists</button>
+              <MultiButtonWrapper>
+                <button onClick={openCreateRoomModal}>Create A Room</button>
+                <button onClick={onMoveToRoomListPage}>Room Lists</button>
+                <button onClick={closeModal}>Cancle</button>
+              </MultiButtonWrapper>
               {isCreateRoomOpen && (
                 <Modal
                   onClose={closeModal}
@@ -150,6 +154,26 @@ function ModeSelection({ onBlindMode }) {
     </>
   );
 }
+
+const SingleButtonWrapper = styled.div`
+  button {
+    background-color: #354259;
+  }
+  button:hover {
+    color: #354259;
+    background-color: #fff;
+  }
+`;
+
+const MultiButtonWrapper = styled.div`
+  button {
+    background-color: #adcf9f;
+  }
+  button:hover {
+    color: #adcf9f;
+    background-color: #fff;
+  }
+`;
 
 const Wrapper = styled.div`
   padding: 5%;
