@@ -43,14 +43,19 @@ function MainPage() {
       {isOpen && (
         <Modal
           onClose={closeModal}
+          backgroudColor="#A0BCC2"
           message={
-            <>
+            <InformationWrapper>
               <h1>about</h1>
-              <div>
+            </InformationWrapper>
+          }
+          informationContent={
+            <InformationWrapper>
+              <p className="information">
                 This game is made for optimizing mouse scroll event in
                 JavaScript.....
-              </div>
-            </>
+              </p>
+            </InformationWrapper>
           }
         />
       )}
@@ -83,6 +88,7 @@ function MainPage() {
 const IconWrapper = styled.div`
   padding: 10px 24px;
   button {
+    background-color: #a0bcc2;
     border: none;
     position: absolute;
     left: 95%;
@@ -124,6 +130,19 @@ const ModeWrapper = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: 5%;
+`;
+
+const InformationWrapper = styled.div`
+  h1 {
+    margin-top: 0;
+  }
+
+  p {
+    color: white;
+    font-size: 40px;
+    padding: 0 5%;
+    margin: 0;
+  }
 `;
 
 export default MainPage;
