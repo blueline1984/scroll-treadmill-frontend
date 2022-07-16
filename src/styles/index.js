@@ -3,7 +3,6 @@ import ActionJ from "../assets/font/actionj.ttf";
 
 const GlobalStyle = createGlobalStyle`
   * {
-    background-color: #A0BCC2;
     font-family: "Amatic SC" , cursive;
 
     @font-face {
@@ -15,6 +14,7 @@ const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
     padding: 0;
+    background-color: #A0BCC2;
   }
 
   button {
