@@ -1,33 +1,13 @@
 import React from "react";
-import { MdClose } from "react-icons/md";
 import styled from "styled-components";
 
 import Portal from "../Portal";
 
-function Modal({
-  message,
-  onClose,
-  backgroudColor,
-  closeButton = true,
-  informationContent,
-}) {
+function Modal({ message, backgroudColor, informationContent }) {
   return (
     <Portal>
       <ModalOverlay>
         <ModalBody style={{ backgroundColor: `${backgroudColor}` }}>
-          {closeButton && (
-            <MdClose
-              onClick={onClose}
-              style={{
-                backgroundColor: `${backgroudColor}`,
-                color: "white",
-                position: "relative",
-                left: "95%",
-                cursor: "pointer",
-              }}
-              size={50}
-            />
-          )}
           <ModalContent>{message}</ModalContent>
           {informationContent}
         </ModalBody>
@@ -42,7 +22,7 @@ const ModalOverlay = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.6);
   zindex: 1000;
 `;
 
