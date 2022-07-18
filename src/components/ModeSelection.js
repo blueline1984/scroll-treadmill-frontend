@@ -52,7 +52,6 @@ function ModeSelection({ onBlindMode }) {
     <>
       {isSingleOpen && (
         <Modal
-          closeButton={false}
           backgroudColor="#354259"
           onClose={closeModal}
           message={
@@ -68,7 +67,6 @@ function ModeSelection({ onBlindMode }) {
       )}
       {isMultiOpen && (
         <Modal
-          closeButton={false}
           backgroudColor="#ADCF9F"
           onClose={closeModal}
           message={
@@ -83,7 +81,7 @@ function ModeSelection({ onBlindMode }) {
                 <Modal
                   onClose={closeModal}
                   backgroudColor="#ADCF9F"
-                  message={<RoomCreation />}
+                  message={<RoomCreation onClose={closeModal} />}
                 />
               )}
             </>
