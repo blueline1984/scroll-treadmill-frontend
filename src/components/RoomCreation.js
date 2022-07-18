@@ -15,7 +15,7 @@ function RoomCreation() {
     if (roomTitle.length === 0) {
       alert("Please,Insert Room Title");
     } else {
-      socket.emit("makeRoom", roomTitle);
+      socket.emit("createRoom", roomTitle);
       navigate("/roomlist");
     }
   };
@@ -23,7 +23,7 @@ function RoomCreation() {
   return (
     <>
       <h1>Create Room</h1>
-      <label htmlFor="title"> Room's Title : </label>
+      <label htmlFor="title">Room's Title : </label>
       <input id="title" type="text" onChange={handleInputChange} />
       <button onClick={handleRoomCreation}>Create</button>
     </>
