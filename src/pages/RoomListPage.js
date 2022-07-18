@@ -9,7 +9,7 @@ import { roomlistState } from "../states/roomlist";
 function RoomListPage() {
   const [joinRoom, setJoinRoom] = useState("");
   const [participantNum, setParticipantNum] = useState(0);
-  const [roomListRecoil, setRoomListRecoil] = useRecoilState(roomlistState);
+  const [roomList, setRoomList] = useRecoilState(roomlistState);
 
   const navigate = useNavigate();
 
@@ -23,9 +23,10 @@ function RoomListPage() {
 
   //만들어진 방 목록 받기
   useEffect(() => {
-    socket.on("roomList", (rooms) => {
-      console.log("방 목록받기");
-      setRoomListRecoil(rooms);
+    socket.emit("getAllRooms");
+    socket.on("allRoomList", (rooms) => {
+      setRoomList(rooms);
+      socket.emit("newRoom");
     });
   }, []);
 
@@ -40,15 +41,14 @@ function RoomListPage() {
         Back To Main
       </button>
       <div>
-        {Object.keys(roomListRecoil).map((roomId) => (
-          <li key={roomId} style={{ border: "solid 1px black" }}>
-            <p>{roomListRecoil[roomId].roomTitle}</p>
+        {Object.keys(roomList).map((roomId) => (
+          <div key={roomId} style={{ border: "solid 1px black" }}>
+            <p>{roomList[roomId].roomTitle}</p>
             <p>
-              {participantNum} / {roomListRecoil[roomId].roomMaxNum}
+              {participantNum} / {roomList[roomId].roomMaxNum}
             </p>
-            {/* <Link to={`/waitingroom/${roomId}`}>button</Link> */}
             <button onClick={() => handleJoinRoom(roomId)}>Join Button</button>
-          </li>
+          </div>
         ))}
       </div>
     </>
