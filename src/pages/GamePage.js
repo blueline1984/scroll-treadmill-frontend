@@ -36,7 +36,6 @@ function GamePage() {
       {isGameResultModalOpen && (
         <Modal
           backgroudColor="#354259"
-          closeButton={false}
           message={
             <>
               <h1 style={{ color: "white", background: "#354259" }}>Result</h1>
