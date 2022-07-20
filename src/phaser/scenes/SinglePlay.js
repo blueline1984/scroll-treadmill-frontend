@@ -128,8 +128,8 @@ export default class Single extends Phaser.Scene {
     this.speedTreadmill();
 
     //Character mouse wheel event
-    const canvasElement =
-      document.body.childNodes[1].childNodes[0].childNodes[0];
+    // const canvasElement =
+    //   document.body.childNodes[1].childNodes[0].childNodes[0];
 
     const throttle = (callback, limit) => {
       let waiting = false;
@@ -144,7 +144,7 @@ export default class Single extends Phaser.Scene {
       };
     };
 
-    canvasElement.addEventListener(
+    window.addEventListener(
       "wheel",
       throttle(() => {
         this.count += 1;
