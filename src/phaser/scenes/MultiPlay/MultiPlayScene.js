@@ -48,7 +48,7 @@ export default class Multi extends Phaser.Scene {
     this.scene.add("CountDownScene", countDownScene, true);
 
     //Character Velocity
-    this.velocity = this.add.text(1000, 30, `Speed `, {
+    this.velocity = this.add.text(950, 30, `Speed `, {
       fontSize: "70px",
       fontFamily: "Amatic SC",
     });
