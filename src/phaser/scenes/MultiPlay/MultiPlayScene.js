@@ -9,12 +9,16 @@ export default class Multi extends Phaser.Scene {
     this.treadmillAcceleration = -3;
     this.count = 0;
   }
+
   init() {
     this.width = this.scale.width;
     this.height = this.scale.height;
   }
 
   preload() {
+    //loading
+    // this.setLoading();
+
     //Alien
     this.load.spritesheet("alien", `textures/alien2_spritesheet.png`, {
       frameWidth: 68,
@@ -29,6 +33,13 @@ export default class Multi extends Phaser.Scene {
 
     //Chracter identifier
     this.load.image("me", "textures/me.png");
+
+    //loading
+    // this.load.on("progress", this.updateLoading, {
+    //   loadingText: this.loadingText,
+    // });
+
+    // this.load.on("complete", this.completeLoading, { scene: this.scene });
   }
 
   create() {
@@ -37,12 +48,12 @@ export default class Multi extends Phaser.Scene {
     this.scene.add("CountDownScene", countDownScene, true);
 
     //Character Velocity
-    this.velocity = this.add.text(800, 30, `Speed `, {
+    this.velocity = this.add.text(1000, 30, `Speed `, {
       fontSize: "70px",
       fontFamily: "Amatic SC",
     });
 
-    this.counter = this.add.text(1300, 30, `Mouse Scroll `, {
+    this.counter = this.add.text(1600, 30, `Mouse Scroll `, {
       fontSize: "70px",
       fontFamily: "Amatic SC",
     });
@@ -82,8 +93,6 @@ export default class Multi extends Phaser.Scene {
     socket.on("characterMoved", (playerInfo) => {
       this.otherPlayers.getChildren().forEach((otherPlayer) => {
         if (playerInfo.playerId === otherPlayer.playerId) {
-          const oldX = otherPlayer.x; //불필요
-          const oldY = otherPlayer.y;
           otherPlayer.setPosition(playerInfo.x, playerInfo.y);
         }
       });
@@ -161,7 +170,7 @@ export default class Multi extends Phaser.Scene {
 
     //Game over zone
     const { width, height } = this.scale;
-    this.zone = this.add.zone(width * 0.1, height).setSize(800, 100);
+    this.zone = this.add.zone(width * 0.1, height).setSize(width * 3, 100);
     this.physics.world.enable(this.zone);
     this.zone.body.setAllowGravity(false);
     this.zone.body.moves = false;
@@ -177,11 +186,16 @@ export default class Multi extends Phaser.Scene {
     );
 
     //identifier
-    this.me = this.add.image(width * 0.5, height * 0.38, "me");
+    socket.on("currentPlayers", (data) => {
+      this.me = this.add.image(
+        data.players[socket.id].x + 10,
+        data.players[socket.id].y - 130,
+        "me"
+      );
+    });
 
     //disconnet
     socket.on("disconnected", (playerInfo) => {
-      console.log("disconnect");
       const { playerId, playerNum } = playerInfo;
       scene.state.playerNum = playerNum;
       scene.otherPlayers.getChildren().forEach((otherPlayer) => {
@@ -197,7 +211,6 @@ export default class Multi extends Phaser.Scene {
           callback: () => {
             this.game.events.emit("gameOver");
             this.scene.pause();
-            console.log("phaser die");
           },
           callbackScope: this,
           delay: 1000,
@@ -255,16 +268,6 @@ export default class Multi extends Phaser.Scene {
         if (this.alien) {
           this.physics.add.collider(this.alien, eachPlayer);
         }
-
-        /* 참고 */
-        // if (eachPlayer.body.position.x !== eachPlayer.body.prev.x) {
-        //   eachPlayer.play("alien-walk-1", true);
-        // }
-        // eachPlayer.play("alien-idle");
-
-        // else {
-        //   eachPlayer.play("alien-walk-1", true);
-        // }
       });
     }
 
@@ -273,19 +276,27 @@ export default class Multi extends Phaser.Scene {
       this.physics.add.collider(this.alien, this.treadmill);
 
       //identifier
-      this.me.x = this.alien.body.position.x + 30;
-      this.me.y = this.alien.body.position.y - 100;
+      this.me.x = this.alien.x + 10;
+      this.me.y = this.alien.y - 130;
 
       //Character Acceleration setting
       this.alien.setAcceleration(0);
       this.alien.setDrag(0);
+
       if (!this.alien.body.acceleration.x) {
         this.alien.body.setDrag(150);
       }
 
       //Treadmill Velocity
+      const { width } = this.scale;
       if (this.treadmill.body.touching.up && this.alien.body.touching.down) {
         this.alien.body.position.add({ x: this.treadmillAcceleration, y: 0 });
+      } else if (this.alien.body.position.x < width * 0.15) {
+        console.log("!");
+        this.alien.body.position.add({
+          x: this.treadmillAcceleration,
+          y: 0,
+        });
       }
 
       //My character animation
@@ -327,7 +338,6 @@ export default class Multi extends Phaser.Scene {
   }
 
   addPlayer(scene, playerInfo) {
-    scene.joined = true; //추후 삭제
     this.alien = scene.physics.add
       .sprite(playerInfo.x, playerInfo.y, "alien")
       .setOrigin(0.5, 0.5)
@@ -355,9 +365,29 @@ export default class Multi extends Phaser.Scene {
   }
 
   setTimer() {
-    this.timer = this.add.text(50, 30, "Time ", {
+    this.timer = this.add.text(250, 30, "Time ", {
       fontSize: "65px",
       fontFamily: "Amatic SC",
     });
+  }
+
+  setLoading() {
+    const { width, height } = this.scale;
+
+    this.loadingText = this.add
+      .text(width * 0.5, height * 0.4, "Loading...", {
+        fontSize: "200px",
+        fill: "#FFFFFF",
+        fontFamily: "Amatic SC",
+      })
+      .setOrigin(0.5);
+  }
+
+  updateLoading(percentage) {
+    this.loadingText.setText(`Loading... ${percentage.toFixed(0) * 100}%`);
+  }
+
+  completeLoading() {
+    this.scene.start("multi");
   }
 }
