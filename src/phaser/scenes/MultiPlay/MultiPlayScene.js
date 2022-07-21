@@ -1,19 +1,24 @@
 import Phaser from "phaser";
+import CountDownScene from "../CountDownScene";
 import { socket } from "../../../utils/socket";
 
 export default class Multi extends Phaser.Scene {
   constructor() {
     super("multi");
     this.state = {};
-    this.players = {};
     this.treadmillAcceleration = -3;
+    this.count = 0;
   }
+
   init() {
     this.width = this.scale.width;
     this.height = this.scale.height;
   }
 
   preload() {
+    //loading
+    // this.setLoading();
+
     //Alien
     this.load.spritesheet("alien", `textures/alien2_spritesheet.png`, {
       frameWidth: 68,
@@ -28,9 +33,35 @@ export default class Multi extends Phaser.Scene {
 
     //Chracter identifier
     this.load.image("me", "textures/me.png");
+
+    //loading
+    // this.load.on("progress", this.updateLoading, {
+    //   loadingText: this.loadingText,
+    // });
+
+    // this.load.on("complete", this.completeLoading, { scene: this.scene });
   }
 
   create() {
+    //count down scene
+    const countDownScene = new CountDownScene(this.scene);
+    this.scene.add("CountDownScene", countDownScene, true);
+
+    //Character Velocity
+    this.velocity = this.add.text(1000, 30, `Speed `, {
+      fontSize: "70px",
+      fontFamily: "Amatic SC",
+    });
+
+    this.counter = this.add.text(1600, 30, `Mouse Scroll `, {
+      fontSize: "70px",
+      fontFamily: "Amatic SC",
+    });
+
+    //Timer
+    this.setTimer();
+    this.stTime = new Date().getTime();
+
     const scene = this;
 
     //Joined Room - setState
@@ -62,8 +93,6 @@ export default class Multi extends Phaser.Scene {
     socket.on("characterMoved", (playerInfo) => {
       this.otherPlayers.getChildren().forEach((otherPlayer) => {
         if (playerInfo.playerId === otherPlayer.playerId) {
-          const oldX = otherPlayer.x; //불필요
-          const oldY = otherPlayer.y;
           otherPlayer.setPosition(playerInfo.x, playerInfo.y);
         }
       });
@@ -139,6 +168,14 @@ export default class Multi extends Phaser.Scene {
       };
     };
 
+    //Game over zone
+    const { width, height } = this.scale;
+    this.zone = this.add.zone(width * 0.1, height).setSize(width * 3, 100);
+    this.physics.world.enable(this.zone);
+    this.zone.body.setAllowGravity(false);
+    this.zone.body.moves = false;
+
+    //mouse scroll event handler
     window.addEventListener(
       "wheel",
       throttle(() => {
@@ -149,12 +186,77 @@ export default class Multi extends Phaser.Scene {
     );
 
     //identifier
-    const { width, height } = this.scale;
+    socket.on("currentPlayers", (data) => {
+      this.me = this.add.image(
+        data.players[socket.id].x + 10,
+        data.players[socket.id].y - 130,
+        "me"
+      );
+    });
 
-    this.me = this.add.image(width * 0.5, height * 0.38, "me");
+    //disconnet
+    socket.on("disconnected", (playerInfo) => {
+      const { playerId, playerNum } = playerInfo;
+      scene.state.playerNum = playerNum;
+      scene.otherPlayers.getChildren().forEach((otherPlayer) => {
+        if (playerId === otherPlayer.playerId) {
+          otherPlayer.destroy();
+        }
+      });
+    });
+
+    socket.on("characterFalled", (playerNum) => {
+      if (!playerNum) {
+        this.time.addEvent({
+          callback: () => {
+            this.game.events.emit("gameOver");
+            this.scene.pause();
+          },
+          callbackScope: this,
+          delay: 1000,
+        });
+      }
+    });
   }
 
   update() {
+    //Game over modal
+    if (this.alien) {
+      this.physics.add.overlap(this.alien, this.zone, () => {
+        this.time.addEvent({
+          callback: () => {
+            socket.emit("characterFall", socket.id);
+          },
+          callbackScope: this,
+          delay: 1000,
+        });
+      });
+    }
+
+    //Time Checker
+    this.nowTime = new Date().getTime();
+    this.newTime = new Date(this.nowTime - this.stTime);
+
+    function addZero(num) {
+      return num < 10 ? "0" + num : "" + num;
+    }
+
+    this.timer.setText(
+      `Time   ${addZero(this.newTime.getMinutes())} : ${addZero(
+        this.newTime.getSeconds()
+      )} : ${Math.floor(this.newTime.getMilliseconds() / 10)}`
+    );
+
+    // Show Mouse Scroll
+    this.counter.setText(`Mouse Scroll   ${this.count}`);
+
+    // Show Character Velocity
+    if (this.alien) {
+      this.velocity.setText(
+        `Speed   ${this.alien.body.velocity.x.toFixed(1) / 10}`
+      );
+    }
+
     const scene = this;
 
     //other player's animation
@@ -162,20 +264,10 @@ export default class Multi extends Phaser.Scene {
       scene.otherPlayers.children.entries.forEach((eachPlayer) => {
         eachPlayer.play("alien-walk-1", true);
 
+        //collision
         if (this.alien) {
           this.physics.add.collider(this.alien, eachPlayer);
-          console.log("충돌");
         }
-
-        /* 참고 */
-        // if (eachPlayer.body.position.x !== eachPlayer.body.prev.x) {
-        //   eachPlayer.play("alien-walk-1", true);
-        // }
-        // eachPlayer.play("alien-idle");
-
-        // else {
-        //   eachPlayer.play("alien-walk-1", true);
-        // }
       });
     }
 
@@ -184,19 +276,27 @@ export default class Multi extends Phaser.Scene {
       this.physics.add.collider(this.alien, this.treadmill);
 
       //identifier
-      this.me.x = this.alien.body.position.x + 30;
-      this.me.y = this.alien.body.position.y - 100;
+      this.me.x = this.alien.x + 10;
+      this.me.y = this.alien.y - 130;
 
       //Character Acceleration setting
       this.alien.setAcceleration(0);
       this.alien.setDrag(0);
+
       if (!this.alien.body.acceleration.x) {
         this.alien.body.setDrag(150);
       }
 
       //Treadmill Velocity
+      const { width } = this.scale;
       if (this.treadmill.body.touching.up && this.alien.body.touching.down) {
         this.alien.body.position.add({ x: this.treadmillAcceleration, y: 0 });
+      } else if (this.alien.body.position.x < width * 0.15) {
+        console.log("!");
+        this.alien.body.position.add({
+          x: this.treadmillAcceleration,
+          y: 0,
+        });
       }
 
       //My character animation
@@ -238,7 +338,6 @@ export default class Multi extends Phaser.Scene {
   }
 
   addPlayer(scene, playerInfo) {
-    scene.joined = true; //추후 삭제
     this.alien = scene.physics.add
       .sprite(playerInfo.x, playerInfo.y, "alien")
       .setOrigin(0.5, 0.5)
@@ -248,7 +347,6 @@ export default class Multi extends Phaser.Scene {
   }
 
   addOtherPlayers(scene, playerInfo) {
-    scene.joined = true; //추후 삭제
     this.otherPlayer = scene.physics.add
       .sprite(playerInfo.x + 40, playerInfo.y + 40, "alien")
       .setOrigin(0.5, 0.5)
@@ -264,5 +362,32 @@ export default class Multi extends Phaser.Scene {
     window.setInterval(() => {
       this.treadmillAcceleration -= 1;
     }, 5000);
+  }
+
+  setTimer() {
+    this.timer = this.add.text(250, 30, "Time ", {
+      fontSize: "65px",
+      fontFamily: "Amatic SC",
+    });
+  }
+
+  setLoading() {
+    const { width, height } = this.scale;
+
+    this.loadingText = this.add
+      .text(width * 0.5, height * 0.4, "Loading...", {
+        fontSize: "200px",
+        fill: "#FFFFFF",
+        fontFamily: "Amatic SC",
+      })
+      .setOrigin(0.5);
+  }
+
+  updateLoading(percentage) {
+    this.loadingText.setText(`Loading... ${percentage.toFixed(0) * 100}%`);
+  }
+
+  completeLoading() {
+    this.scene.start("multi");
   }
 }
