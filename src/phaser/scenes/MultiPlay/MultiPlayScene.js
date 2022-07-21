@@ -6,6 +6,7 @@ export default class Multi extends Phaser.Scene {
     super("multi");
     this.state = {};
     this.players = {};
+    this.treadmillAcceleration = -3;
   }
   init() {
     this.width = this.scale.width;
@@ -156,9 +157,15 @@ export default class Multi extends Phaser.Scene {
   update() {
     const scene = this;
 
+    //other player's animation
     if (scene.otherPlayers.children.entries) {
       scene.otherPlayers.children.entries.forEach((eachPlayer) => {
         eachPlayer.play("alien-walk-1", true);
+
+        if (this.alien) {
+          this.physics.add.collider(this.alien, eachPlayer);
+          console.log("충돌");
+        }
 
         /* 참고 */
         // if (eachPlayer.body.position.x !== eachPlayer.body.prev.x) {
@@ -173,9 +180,26 @@ export default class Multi extends Phaser.Scene {
     }
 
     if (this.alien) {
+      //Collide Treadmill and Player
+      this.physics.add.collider(this.alien, this.treadmill);
+
+      //identifier
       this.me.x = this.alien.body.position.x + 30;
       this.me.y = this.alien.body.position.y - 100;
 
+      //Character Acceleration setting
+      this.alien.setAcceleration(0);
+      this.alien.setDrag(0);
+      if (!this.alien.body.acceleration.x) {
+        this.alien.body.setDrag(150);
+      }
+
+      //Treadmill Velocity
+      if (this.treadmill.body.touching.up && this.alien.body.touching.down) {
+        this.alien.body.position.add({ x: this.treadmillAcceleration, y: 0 });
+      }
+
+      //My character animation
       if (this.alien.body.velocity.x === 0) {
         this.alien.play("alien-idle");
       } else {
@@ -219,7 +243,8 @@ export default class Multi extends Phaser.Scene {
       .sprite(playerInfo.x, playerInfo.y, "alien")
       .setOrigin(0.5, 0.5)
       .setSize(70, 80)
-      .setOffset(0, 12);
+      .setOffset(0, 12)
+      .setGravityY(500);
   }
 
   addOtherPlayers(scene, playerInfo) {
@@ -228,8 +253,16 @@ export default class Multi extends Phaser.Scene {
       .sprite(playerInfo.x + 40, playerInfo.y + 40, "alien")
       .setOrigin(0.5, 0.5)
       .setSize(70, 80)
-      .setOffset(0, 12);
+      .setOffset(0, 12)
+      .setGravityY(500);
     this.otherPlayer.playerId = playerInfo.playerId;
     scene.otherPlayers.add(this.otherPlayer);
+  }
+
+  //Treadmill Speed Setting
+  speedTreadmill() {
+    window.setInterval(() => {
+      this.treadmillAcceleration -= 1;
+    }, 5000);
   }
 }
