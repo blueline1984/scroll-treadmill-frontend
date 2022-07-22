@@ -12,7 +12,7 @@ function MainPage() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [onBlindMode, setOnBlindMode] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
-  const audioRef = useRef(new Audio(mainThemeSong));
+  const backgroundSoundRef = useRef(new Audio(mainThemeSong));
 
   const handleSound = () => {
     setIsPlaying((isPlaying) => !isPlaying);
@@ -30,11 +30,11 @@ function MainPage() {
   useEffect(() => {
     //위치 변경
     if (isPlaying) {
-      audioRef.current.play();
-      audioRef.current.loop = true;
-      audioRef.current.autoplay = true;
+      backgroundSoundRef.current.play();
+      backgroundSoundRef.current.loop = true;
+      backgroundSoundRef.current.autoplay = true;
     } else {
-      audioRef.current.pause();
+      backgroundSoundRef.current.pause();
     }
   }, [isPlaying]);
 
