@@ -12,6 +12,8 @@ export default class Preloader extends Phaser.Scene {
     //audio
     this.loadBackgroundMusic();
 
+    this.loadBackgroundObject();
+
     //Alien
     this.load.spritesheet("alien", `textures/alien2_spritesheet.png`, {
       frameWidth: 68,
@@ -57,5 +59,12 @@ export default class Preloader extends Phaser.Scene {
 
   loadBackgroundMusic() {
     this.load.audio("ingame", "sound/racing mode_2.mp3");
+  }
+
+  loadBackgroundObject() {
+    this.load.image("rocket", "textures/rocket.png");
+    this.load.image("starSmall", "textures/star_small.png");
+    this.load.image("starBig", "textures/star_big.png");
+    this.load.image("meteorite", "textures/meteorite.png");
   }
 }

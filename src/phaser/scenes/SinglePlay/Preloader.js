@@ -17,6 +17,8 @@ export default class Preloader extends Phaser.Scene {
     //bgm
     this.loadBackgroundMusic();
 
+    this.loadBackgroundObject();
+
     this.load.spritesheet(
       "alien",
       `textures/${this.selectedCharacter}_spritesheet.png`,
@@ -64,5 +66,12 @@ export default class Preloader extends Phaser.Scene {
 
   loadBackgroundMusic() {
     this.load.audio("ingame", "sound/racing mode_2.mp3");
+  }
+
+  loadBackgroundObject() {
+    this.load.image("rocket", "textures/rocket.png");
+    this.load.image("starSmall", "textures/star_small.png");
+    this.load.image("starBig", "textures/star_big.png");
+    this.load.image("meteorite", "textures/meteorite.png");
   }
 }
