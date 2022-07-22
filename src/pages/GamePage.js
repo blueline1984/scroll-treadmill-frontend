@@ -1,33 +1,29 @@
 import Phaser from "phaser";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue, useSetRecoilState } from "recoil";
 
 import Modal from "../components/Modal";
-
-import { gameoverState } from "../states/modal";
 
 import config from "../phaser/scenes/config";
 
 function GamePage() {
+  const [isGameResultModalOpen, setIsGameResultModalOpen] = useState(false);
   const navigate = useNavigate();
-  const setResultState = useSetRecoilState(gameoverState); //setter
-  const isGameResultModalOpen = useRecoilValue(gameoverState); //getter
 
   useEffect(() => {
     const game = new Phaser.Game(config);
 
     game.events.on("gameOver", () => {
-      setResultState(true);
+      setIsGameResultModalOpen(true);
     });
 
     return () => {
       game.destroy();
     };
-  }, [setResultState]);
+  }, [setIsGameResultModalOpen]);
 
   const handleMainButtonClick = () => {
-    setResultState(false);
+    setIsGameResultModalOpen(false);
     navigate("/");
   };
 
