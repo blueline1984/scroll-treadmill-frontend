@@ -44,7 +44,6 @@ function WaitingPage() {
   useEffect(() => {
     //data 수정
     socket.on("welcome", (data) => {
-      alert(data);
       socket.emit("getAllPlayers");
       socket.on("players", (players) => {
         setPlayers(players);

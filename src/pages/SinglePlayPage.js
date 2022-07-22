@@ -35,8 +35,8 @@ function GamePage() {
           message={
             <>
               <h1 style={{ color: "white", background: "#354259" }}>Result</h1>
-              <div>Time: </div>
-              <div>Speed: </div>
+              {/* <div>Time: </div>
+              <div>Speed: </div> */}
               <button onClick={handleMainButtonClick}>Back To Main</button>
             </>
           }

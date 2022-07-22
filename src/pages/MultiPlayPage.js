@@ -29,12 +29,12 @@ function MultiPlayPage() {
     <>
       {isGameResultModalOpen && (
         <Modal
-          backgroudColor="#354259"
+          backgroudColor="#ADCF9F"
           message={
             <>
-              <h1 style={{ color: "white", background: "#354259" }}>Result</h1>
-              <div>Time: </div>
-              <div>Speed: </div>
+              <h1 style={{ color: "white", background: "#ADCF9F" }}>Result</h1>
+              {/* <div>Time: </div>
+              <div>Speed: </div> */}
               <button onClick={handleMainButtonClick}>Back To Main</button>
             </>
           }
