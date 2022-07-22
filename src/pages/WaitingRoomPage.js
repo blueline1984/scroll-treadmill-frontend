@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { socket } from "../utils/socket";
 import styled from "styled-components";
+import readyClickSound from "../assets/ready_click.ogg";
 
 function WaitingPage() {
   const [players, setPlayers] = useState({});
@@ -11,6 +12,7 @@ function WaitingPage() {
   const [isReady, setIsReady] = useState(false);
   const [isNotReady, setIsNotReady] = useState(false);
   const ImageLength = ImageArray.length;
+  const clickAudioRef = useRef(new Audio(readyClickSound));
 
   const { roomId } = useParams();
   const navigate = useNavigate();
@@ -20,6 +22,8 @@ function WaitingPage() {
     setIsNotReady(false);
     socket.emit("ready", socket.id, ImageArray[imageIndex]);
     socket.emit("characterSelect", ImageArray[imageIndex], socket.id);
+    clickAudioRef.current.play();
+    clickAudioRef.current.loop = false;
   };
 
   const handleCancle = () => {
