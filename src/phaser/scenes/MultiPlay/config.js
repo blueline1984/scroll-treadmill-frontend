@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import Preloader from "phaser";
+import Preloader from "./Preloader";
 import MultiPlayScene from "./MultiPlayScene";
 
 const config = {
@@ -20,7 +20,7 @@ const config = {
       debug: true,
     },
   },
-  scene: [MultiPlayScene],
+  scene: [Preloader, MultiPlayScene],
 };
 
 export default config;
