@@ -16,7 +16,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<MainPage />} />
-        <Route path="/game" element={<SinglePlayPage />} />
+        <Route path="/single" element={<SinglePlayPage />} />
         <Route path="/multi" element={<MultiPlayPage />} />
         <Route path="/roomlist" element={<RoomListPage />} />
         <Route path="/waitingroom/:roomId" element={<WaitingRoomPage />} />

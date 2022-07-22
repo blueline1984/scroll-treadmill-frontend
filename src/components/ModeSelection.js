@@ -13,7 +13,7 @@ function ModeSelection({ onBlindMode }) {
   const navigate = useNavigate();
 
   const onMoveToSingleGame = () => {
-    navigate("/game");
+    navigate("/single");
   };
 
   const openSingleModal = () => {
