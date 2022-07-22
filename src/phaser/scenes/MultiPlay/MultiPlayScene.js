@@ -16,9 +16,11 @@ export default class Multi extends Phaser.Scene {
   }
 
   preload() {
-    // socket.on("character", (data) => console.log(data));
     //loading
     // this.setLoading();
+
+    //audio
+    this.loadBackgroundMusic();
 
     //Alien
     this.load.spritesheet("alien", `textures/alien2_spritesheet.png`, {
@@ -44,8 +46,11 @@ export default class Multi extends Phaser.Scene {
   }
 
   create() {
+    //audio
+    this.inGameMusic = this.sound.add("ingame", { loop: true });
+
     //count down scene
-    const countDownScene = new CountDownScene(this.scene);
+    const countDownScene = new CountDownScene(this.scene, this.inGameMusic);
     this.scene.add("CountDownScene", countDownScene, true);
 
     //Character Velocity
@@ -212,6 +217,7 @@ export default class Multi extends Phaser.Scene {
           callback: () => {
             this.game.events.emit("gameOver");
             this.scene.pause();
+            this.inGameMusic.pause();
           },
           callbackScope: this,
           delay: 1000,
@@ -389,5 +395,9 @@ export default class Multi extends Phaser.Scene {
 
   completeLoading() {
     this.scene.start("multi");
+  }
+
+  loadBackgroundMusic() {
+    this.load.audio("ingame", "sound/racing mode_2.mp3");
   }
 }
