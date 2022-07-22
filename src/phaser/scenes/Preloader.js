@@ -52,7 +52,7 @@ export default class Preloader extends Phaser.Scene {
   }
 
   updateLoading(percentage) {
-    this.loadingText.setText(`Loading... ${percentage.toFixed(1)}%`);
+    this.loadingText.setText(`Loading... ${percentage.toFixed(1) * 100}%`);
   }
 
   completeLoading() {
