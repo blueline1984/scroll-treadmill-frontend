@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import Modal from "../components/Modal";
 
-import config from "../phaser/scenes/config";
+import config from "../phaser/scenes/SinglePlay/config";
 
 function GamePage() {
   const [isGameResultModalOpen, setIsGameResultModalOpen] = useState(false);

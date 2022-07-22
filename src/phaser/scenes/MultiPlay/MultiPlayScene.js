@@ -16,6 +16,7 @@ export default class Multi extends Phaser.Scene {
   }
 
   preload() {
+    // socket.on("character", (data) => console.log(data));
     //loading
     // this.setLoading();
 
@@ -292,7 +293,6 @@ export default class Multi extends Phaser.Scene {
       if (this.treadmill.body.touching.up && this.alien.body.touching.down) {
         this.alien.body.position.add({ x: this.treadmillAcceleration, y: 0 });
       } else if (this.alien.body.position.x < width * 0.15) {
-        console.log("!");
         this.alien.body.position.add({
           x: this.treadmillAcceleration,
           y: 0,

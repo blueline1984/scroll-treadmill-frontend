@@ -1,8 +1,8 @@
 import Phaser from "phaser";
 
-import CharacterSelect from "./CharacterSelect";
+import CharacterSelect from "./CharacterSelectScene";
 import Preloader from "./Preloader";
-import SinglePlay from "./SinglePlay";
+import SinglePlay from "./SinglePlayScene";
 
 const config = {
   title: "Scroll Treadmill",
