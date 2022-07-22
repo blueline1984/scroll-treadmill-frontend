@@ -1,34 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
 
 import { socket } from "../utils/socket";
-
-import { roomlistState } from "../states/roomlist";
 
 import styled from "styled-components";
 
 function RoomListPage() {
-  const [joinRoom, setJoinRoom] = useState("");
-  const [participantNum, setParticipantNum] = useState(0);
-  const [roomList, setRoomList] = useRecoilState(roomlistState);
-
+  const [joinRoom, setJoinRoom] = useState(""); //불필요
+  const [roomList, setRoomList] = useState({});
   const navigate = useNavigate();
 
   //해당 방에 참가
   const handleJoinRoom = (roomId) => {
     if (!joinRoom) {
-      socket.emit("joinRoom", joinRoom);
+      socket.emit("joinRoom", roomId);
+      // navigate("/multi");
+      //나중에 바꾸기
       navigate(`/waitingroom/${roomId}`);
     }
   };
 
-  //만들어진 방 목록 받기
+  //만들어진 방 정보 받기
   useEffect(() => {
     socket.emit("getAllRooms");
     socket.on("allRoomList", (rooms) => {
       setRoomList(rooms);
-      socket.emit("newRoom");
     });
   }, []);
 
@@ -50,9 +46,13 @@ function RoomListPage() {
           <div key={roomId} className="content">
             <div>{roomList[roomId].roomTitle}</div>
             <div>
-              {participantNum} / {roomList[roomId].roomMaxNum}
+              {roomList[roomId].playerNum} / {roomList[roomId].roomMaxNum}
             </div>
-            <button onClick={() => handleJoinRoom(roomId)}>Join</button>
+            {roomList[roomId].playerNum < 3 ? (
+              <button onClick={() => handleJoinRoom(roomId)}>Join</button>
+            ) : (
+              <button>Full</button>
+            )}
           </div>
         ))}
       </ContentWrapper>
