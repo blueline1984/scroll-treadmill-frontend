@@ -3,13 +3,13 @@ import Phaser from "phaser";
 export default class CountDownScene extends Phaser.Scene {
   constructor(mainScene) {
     super("CountDownScene");
-
     this.mainScene = mainScene;
   }
 
   preload() {
+    const { width, height } = this.scale;
     this.text = this.add.text(500, 500, "", {
-      fontFamily: "ActionJ", //임의 생성
+      fontFamily: "ActionJ",
     });
   }
 
@@ -31,13 +31,13 @@ export default class CountDownScene extends Phaser.Scene {
       }
 
       if (this.countDownCount === 0) {
-        this.text = this.add.text(width * 0.4, height * 0.4, "Scroll!", {
+        this.text = this.add.text(width * 0.3, height * 0.4, "Scroll!", {
           fontSize: "200px",
           fontFamily: "ActionJ",
         });
       } else {
         this.text = this.add.text(
-          width * 0.5,
+          width * 0.45,
           height * 0.4,
           this.countDownCount,
           {
