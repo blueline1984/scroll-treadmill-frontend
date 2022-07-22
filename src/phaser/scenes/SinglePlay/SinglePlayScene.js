@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import CountDownScene from "./CountDownScene";
+import CountDownScene from "../CountDownScene";
 
 export default class Single extends Phaser.Scene {
   constructor() {

@@ -1,7 +1,6 @@
 import Phaser from "phaser";
 import Preloader from "phaser";
 import MultiPlayScene from "./MultiPlayScene";
-import WaitingRoom from "./WaitingRoom";
 
 const config = {
   title: "Scroll Treadmill",
@@ -21,7 +20,7 @@ const config = {
       debug: true,
     },
   },
-  scene: [MultiPlayScene, WaitingRoom],
+  scene: [MultiPlayScene],
 };
 
 export default config;

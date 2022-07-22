@@ -6,20 +6,20 @@ import {
   Navigate,
 } from "react-router-dom";
 import MainPage from "../pages/MainPage";
-import GamePage from "../pages/GamePage";
+import SinglePlayPage from "../pages/SinglePlayPage";
 import MultiPlayPage from "../pages/MultiPlayPage";
 import RoomListPage from "../pages/RoomListPage";
-import WaitingPage from "../pages/WaitingPage";
+import WaitingRoomPage from "../pages/WaitingRoomPage";
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<MainPage />} />
-        <Route path="/game" element={<GamePage />} />
+        <Route path="/game" element={<SinglePlayPage />} />
         <Route path="/multi" element={<MultiPlayPage />} />
         <Route path="/roomlist" element={<RoomListPage />} />
-        <Route path="/waitingroom/:roomId" element={<WaitingPage />} />
+        <Route path="/waitingroom/:roomId" element={<WaitingRoomPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
