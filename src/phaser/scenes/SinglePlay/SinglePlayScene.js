@@ -15,7 +15,10 @@ export default class Single extends Phaser.Scene {
   }
 
   create() {
-    const countDownScene = new CountDownScene(this.scene);
+    //audio
+    this.inGameMusic = this.sound.add("ingame", { loop: true });
+
+    const countDownScene = new CountDownScene(this.scene, this.inGameMusic);
     this.scene.add("CountDownScene", countDownScene, true);
 
     //Character Velocity
@@ -103,6 +106,7 @@ export default class Single extends Phaser.Scene {
         callback: () => {
           this.game.events.emit("gameOver");
           this.scene.pause();
+          this.inGameMusic.pause();
         },
         callbackScope: this,
         delay: 1000,
@@ -139,7 +143,6 @@ export default class Single extends Phaser.Scene {
       "wheel",
       throttle(() => {
         this.count += 1;
-        console.log(this.count);
         this.player.body.acceleration.setToPolar(this.player.rotation, 1200);
       }, 90),
       { capture: true, passive: true }
