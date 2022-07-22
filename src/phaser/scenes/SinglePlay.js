@@ -19,12 +19,12 @@ export default class Single extends Phaser.Scene {
     this.scene.add("CountDownScene", countDownScene, true);
 
     //Character Velocity
-    this.velocity = this.add.text(800, 30, `Speed `, {
+    this.velocity = this.add.text(950, 30, `Speed `, {
       fontSize: "70px",
       fontFamily: "Amatic SC",
     });
 
-    this.counter = this.add.text(1300, 30, `Mouse Scroll `, {
+    this.counter = this.add.text(1600, 30, `Mouse Scroll `, {
       fontSize: "70px",
       fontFamily: "Amatic SC",
     });
@@ -78,9 +78,6 @@ export default class Single extends Phaser.Scene {
 
     const { width, height } = this.scale;
 
-    // Character Identifier
-    this.me = this.add.image(width * 0.5, height * 0.38, "me");
-
     this.player = this.physics.add
       .sprite(width * 0.5, height * 0.5, "alien")
       .setSize(50, 80)
@@ -95,7 +92,7 @@ export default class Single extends Phaser.Scene {
       .setImmovable();
 
     //Game over zone
-    this.zone = this.add.zone(width * 0.1, height).setSize(800, 100);
+    this.zone = this.add.zone(width * 0.1, height).setSize(width * 3, 100);
     this.physics.world.enable(this.zone);
     this.zone.body.setAllowGravity(false);
     this.zone.body.moves = false;
@@ -105,9 +102,7 @@ export default class Single extends Phaser.Scene {
       this.time.addEvent({
         callback: () => {
           this.game.events.emit("gameOver");
-
           this.scene.pause();
-          console.log("phaser die");
         },
         callbackScope: this,
         delay: 1000,
@@ -126,10 +121,6 @@ export default class Single extends Phaser.Scene {
 
     //Treadmill Speed up
     this.speedTreadmill();
-
-    //Character mouse wheel event
-    // const canvasElement =
-    //   document.body.childNodes[1].childNodes[0].childNodes[0];
 
     const throttle = (callback, limit) => {
       let waiting = false;
@@ -156,10 +147,6 @@ export default class Single extends Phaser.Scene {
   }
 
   update() {
-    // Character Identifier
-    this.me.x = this.player.body.position.x + 30;
-    this.me.y = this.player.body.position.y - 100;
-
     //Time Checker
     this.nowTime = new Date().getTime();
     this.newTime = new Date(this.nowTime - this.stTime);
@@ -186,14 +173,6 @@ export default class Single extends Phaser.Scene {
     this.player.setAcceleration(0);
     this.player.setDrag(0);
 
-    // this.input.addListener(
-    //   "wheel",
-    //   () => {
-    //     this.player.body.acceleration.setToPolar(this.player.rotation, 100);
-    //     console.log("wheel");
-    //   }
-    // );
-
     if (!this.player.body.acceleration.x) {
       this.player.body.setDrag(150);
     }
@@ -206,24 +185,20 @@ export default class Single extends Phaser.Scene {
     }
 
     //Treadmill Velocity
+    const { width } = this.scale;
     if (this.treadmill.body.touching.up && this.player.body.touching.down) {
       this.player.body.position.add({ x: this.treadmillAcceleration, y: 0 });
+    } else if (this.player.body.position.x < width * 0.15) {
+      this.player.body.position.add({
+        x: this.treadmillAcceleration,
+        y: 0,
+      });
     }
-
-    // **참고**
-    // if (this.cursors.up.isDown) {
-    //   this.player.body.acceleration.setToPolar(this.player.rotation, 50);
-    //   // this.player.setVelocity(this.player.body.speed, 0);
-    //   console.log(this.player.body.acceleration);
-    // } else {
-    //   //감속
-    //   this.player.body.setDrag(100);
-    // }
   }
 
   // Time Checker
   setTimer() {
-    this.timer = this.add.text(50, 30, "Time ", {
+    this.timer = this.add.text(250, 30, "Time ", {
       fontSize: "65px",
       fontFamily: "Amatic SC",
     });
