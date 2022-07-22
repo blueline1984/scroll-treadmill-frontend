@@ -14,6 +14,9 @@ export default class Preloader extends Phaser.Scene {
     // loading;
     this.setLoading();
 
+    //bgm
+    this.loadBackgroundMusic();
+
     this.load.spritesheet(
       "alien",
       `textures/${this.selectedCharacter}_spritesheet.png`,
@@ -57,5 +60,9 @@ export default class Preloader extends Phaser.Scene {
 
   completeLoading() {
     this.scene.start("single", { character: this.selectedCharacter });
+  }
+
+  loadBackgroundMusic() {
+    this.load.audio("ingame", "sound/racing mode_2.mp3");
   }
 }
