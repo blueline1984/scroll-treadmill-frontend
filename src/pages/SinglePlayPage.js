@@ -34,10 +34,25 @@ function GamePage() {
           backgroudColor="#354259"
           message={
             <>
-              <h1 style={{ color: "white", background: "#354259" }}>Result</h1>
+              <h1 style={{ color: "#fff", background: "#354259" }}>Result</h1>
+              <div
+                style={{
+                  color: "#fff",
+                  background: "#354259",
+                  fontSize: "50px",
+                  padding: "5%",
+                }}
+              >
+                Game Over
+              </div>
               {/* <div>Time: </div>
               <div>Speed: </div> */}
-              <button onClick={handleMainButtonClick}>Back To Main</button>
+              <button
+                onClick={handleMainButtonClick}
+                style={{ backgroundColor: "#fff", color: "#354259" }}
+              >
+                Back To Main
+              </button>
             </>
           }
         ></Modal>

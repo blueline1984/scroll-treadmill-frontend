@@ -346,7 +346,7 @@ export default class Multi extends Phaser.Scene {
   //Treadmill Speed Setting
   speedTreadmill() {
     window.setInterval(() => {
-      this.treadmillAcceleration -= 1;
+      this.treadmillAcceleration -= 0.5;
     }, 5000);
   }
 

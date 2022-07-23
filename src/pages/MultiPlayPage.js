@@ -35,7 +35,22 @@ function MultiPlayPage() {
               <h1 style={{ color: "white", background: "#ADCF9F" }}>Result</h1>
               {/* <div>Time: </div>
               <div>Speed: </div> */}
-              <button onClick={handleMainButtonClick}>Back To Main</button>
+              <div
+                style={{
+                  color: "#fff",
+                  background: "#ADCF9F",
+                  fontSize: "50px",
+                  padding: "5%",
+                }}
+              >
+                Game Over
+              </div>
+              <button
+                onClick={handleMainButtonClick}
+                style={{ backgroundColor: "#fff", color: "#ADCF9F" }}
+              >
+                Back To Main
+              </button>
             </>
           }
         ></Modal>
