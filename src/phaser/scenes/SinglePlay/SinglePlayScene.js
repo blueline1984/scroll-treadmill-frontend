@@ -15,14 +15,6 @@ export default class Single extends Phaser.Scene {
   }
 
   create() {
-    this.time.addEvent({
-      delay: 1000,
-      callback: () => {
-        console.log("done");
-      },
-      callbackScope: this,
-      reapeat: 1,
-    });
     //audio
     this.inGameMusic = this.sound.add("ingame", { loop: true });
 
@@ -218,7 +210,7 @@ export default class Single extends Phaser.Scene {
   //Treadmill Speed Setting
   speedTreadmill() {
     window.setInterval(() => {
-      this.treadmillAcceleration -= 1;
+      this.treadmillAcceleration -= 0.5;
     }, 5000);
   }
 
