@@ -12,6 +12,7 @@ export default class Preloader extends Phaser.Scene {
     //audio
     this.loadBackgroundMusic();
 
+    //object
     this.loadBackgroundObject();
 
     //Alien
