@@ -20,7 +20,7 @@ export default class Multi extends Phaser.Scene {
     this.inGameMusic = this.sound.add("ingame", { loop: true });
 
     //count down scene
-    const countDownScene = new CountDownScene(this.secene, this.inGameMusic);
+    const countDownScene = new CountDownScene(this.scene, this.inGameMusic);
     this.scene.add("CountDownScene", countDownScene, true);
 
     //Character Velocity
@@ -195,6 +195,7 @@ export default class Multi extends Phaser.Scene {
       }
     });
 
+    //object
     this.createRocket();
     this.createMeteorite();
     this.createSmallStar();
@@ -317,6 +318,7 @@ export default class Multi extends Phaser.Scene {
       };
     }
 
+    //object
     this.updateRocket();
     this.updateMeteorite();
     this.updateSmallStar();
