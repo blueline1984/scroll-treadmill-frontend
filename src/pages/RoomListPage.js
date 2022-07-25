@@ -33,7 +33,7 @@ function RoomListPage() {
   }, []);
 
   return (
-    <>
+    <RoomListPageContainer>
       <HeaderWrapper>
         <div>Room List</div>
         <div className="button_BackToMain" onClick={onMoveToMain}>
@@ -55,9 +55,15 @@ function RoomListPage() {
           </div>
         ))}
       </BodyWrapper>
-    </>
+    </RoomListPageContainer>
   );
 }
+
+const RoomListPageContainer = styled.div`
+  padding: 2%;
+  background-color: #adcf9f;
+  height: 100%;
+`;
 
 const HeaderWrapper = styled.div`
   padding: 3% 5%;
@@ -108,7 +114,7 @@ const BodyWrapper = styled.div`
   }
   button:hover {
     color: #fff;
-    backgroud-color: #adcf9f;
+    background-color: #adcf9f;
   }
 `;
 
