@@ -1,8 +1,6 @@
 import Phaser from "phaser";
 import { useEffect, useState } from "react";
-
 import Modal from "../components/Modal";
-
 import config from "../phaser/scenes/SinglePlay/config";
 import styled from "styled-components";
 
