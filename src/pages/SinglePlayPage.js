@@ -31,7 +31,7 @@ function GamePage() {
       <div id="phaser-container" />
       {isGameResultModalOpen && (
         <Modal
-          backgroudColor="#354259"
+          backgroundColor="#354259"
           message={
             <ResultModalWrapper>
               <h1>Result</h1>

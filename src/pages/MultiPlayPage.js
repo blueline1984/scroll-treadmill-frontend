@@ -31,7 +31,7 @@ function MultiPlayPage() {
       <div id="phaser-container" />
       {isGameResultModalOpen && (
         <Modal
-          backgroudColor="#ADCF9F"
+          color="#ADCF9F"
           message={
             <ResultModalWrapper>
               <h1>Result</h1>

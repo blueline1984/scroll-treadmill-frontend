@@ -3,11 +3,11 @@ import styled from "styled-components";
 
 import Portal from "../Portal";
 
-function Modal({ message, backgroudColor, informationContent }) {
+function Modal({ message, backgroundColor, informationContent }) {
   return (
     <Portal>
       <ModalOverlay>
-        <ModalBody style={{ backgroundColor: `${backgroudColor}` }}>
+        <ModalBody style={{ backgroundColor: `${backgroundColor}` }}>
           <ModalContent>{message}</ModalContent>
           {informationContent}
         </ModalBody>
