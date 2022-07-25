@@ -45,7 +45,7 @@ function MainPage() {
       {isOpen && (
         <Modal
           onClose={closeModal}
-          backgroudColor="#A0BCC2"
+          backgroundColor="#A0BCC2"
           message={
             <InformationModalWrapper>
               <h1>about</h1>
