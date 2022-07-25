@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Modal from "./Modal";
 import RoomCreation from "./RoomCreation";
-
 import styled from "styled-components";
 
 function ModeSelection({ onBlindMode }) {
