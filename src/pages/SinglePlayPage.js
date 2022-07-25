@@ -1,6 +1,5 @@
 import Phaser from "phaser";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import Modal from "../components/Modal";
 
@@ -8,7 +7,11 @@ import config from "../phaser/scenes/SinglePlay/config";
 
 function GamePage() {
   const [isGameResultModalOpen, setIsGameResultModalOpen] = useState(false);
-  const navigate = useNavigate();
+
+  const onMoveToMain = () => {
+    setIsGameResultModalOpen(false);
+    window.location.replace("/");
+  };
 
   useEffect(() => {
     const game = new Phaser.Game(config);
@@ -18,31 +21,24 @@ function GamePage() {
     });
 
     return () => {
-      game.destroy();
+      game.destroy(true, false);
     };
   }, [setIsGameResultModalOpen]);
 
-  const handleMainButtonClick = () => {
-    setIsGameResultModalOpen(false);
-    navigate("/");
-  };
-
   return (
     <>
+      <div id="phaser-container" />
       {isGameResultModalOpen && (
         <Modal
           backgroudColor="#354259"
           message={
             <>
-              <h1 style={{ color: "white", background: "#354259" }}>Result</h1>
-              {/* <div>Time: </div>
-              <div>Speed: </div> */}
-              <button onClick={handleMainButtonClick}>Back To Main</button>
+              <h1 style={{ color: "#fff", background: "#354259" }}>Result</h1>
+              <button onClick={onMoveToMain}>Back To Main</button>
             </>
           }
         ></Modal>
       )}
-      <div id="phaser-container"></div>
     </>
   );
 }

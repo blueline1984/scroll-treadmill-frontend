@@ -16,6 +16,10 @@ function ModeSelection({ onBlindMode }) {
     navigate("/single");
   };
 
+  const onMoveToRoomListPage = () => {
+    navigate("/roomlist");
+  };
+
   const openSingleModal = () => {
     setIsSingleOpen(true);
   };
@@ -24,18 +28,14 @@ function ModeSelection({ onBlindMode }) {
     setIsMultiOpen(true);
   };
 
+  const openRoomCreationModal = () => {
+    setIsCreateRoomOpen(true);
+  };
+
   const closeModal = () => {
     setIsSingleOpen(false);
     setIsMultiOpen(false);
     setIsCreateRoomOpen(false);
-  };
-
-  const openCreateRoomModal = () => {
-    setIsCreateRoomOpen(true);
-  };
-
-  const onMoveToRoomListPage = () => {
-    navigate("/roomlist");
   };
 
   useEffect(() => {
@@ -73,7 +73,7 @@ function ModeSelection({ onBlindMode }) {
             <>
               <h1>Multi Play</h1>
               <MultiButtonWrapper>
-                <button onClick={openCreateRoomModal}>Create A Room</button>
+                <button onClick={openRoomCreationModal}>Create A Room</button>
                 <button onClick={onMoveToRoomListPage}>Room Lists</button>
                 <button onClick={closeModal}>Cancle</button>
               </MultiButtonWrapper>

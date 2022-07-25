@@ -6,8 +6,8 @@ export default class Multi extends Phaser.Scene {
   constructor() {
     super("multi");
     this.state = {};
+    this.scrollCount = 0;
     this.treadmillAcceleration = -3;
-    this.count = 0;
   }
 
   init() {
@@ -29,7 +29,7 @@ export default class Multi extends Phaser.Scene {
       fontFamily: "Amatic SC",
     });
 
-    this.counter = this.add.text(1600, 30, `Mouse Scroll `, {
+    this.scrollCounter = this.add.text(1600, 30, `Mouse Scroll `, {
       fontSize: "70px",
       fontFamily: "Amatic SC",
     });
@@ -89,7 +89,7 @@ export default class Multi extends Phaser.Scene {
     });
 
     this.anims.create({
-      key: "alien-walk-1",
+      key: "alien-walk",
       frames: this.anims.generateFrameNumbers("alien", {
         start: 0,
         end: 1,
@@ -100,7 +100,7 @@ export default class Multi extends Phaser.Scene {
 
     //Treadmill - animation
     this.anims.create({
-      key: "treadmill-working",
+      key: "treadmill",
       frames: [
         {
           key: "treadmill",
@@ -110,7 +110,7 @@ export default class Multi extends Phaser.Scene {
     });
 
     this.anims.create({
-      key: "treadmill-working-1",
+      key: "treadmill-working",
       frames: this.anims.generateFrameNumbers("treadmill", {
         start: 0,
         end: 3,
@@ -123,7 +123,7 @@ export default class Multi extends Phaser.Scene {
       .sprite(this.width * 0.5, this.height * 0.7, "treadmill")
       .setSize(1520, 100)
       .setOffset(120, 570)
-      .play("treadmill-working-1")
+      .play("treadmill-working")
       .setImmovable();
 
     //Conveyor Belt
@@ -155,17 +155,17 @@ export default class Multi extends Phaser.Scene {
     window.addEventListener(
       "wheel",
       throttle(() => {
-        this.count += 1;
+        this.scrollCount += 1;
         this.alien.body.acceleration.setToPolar(this.alien.rotation, 1200);
       }, 90),
       { capture: true, passive: true }
     );
 
     //identifier
-    socket.on("currentPlayers", (data) => {
+    socket.on("currentPlayers", (roomInfo) => {
       this.me = this.add.image(
-        data.players[socket.id].x + 10,
-        data.players[socket.id].y - 130,
+        roomInfo.players[socket.id].x + 10,
+        roomInfo.players[socket.id].y - 130,
         "me"
       );
     });
@@ -181,7 +181,7 @@ export default class Multi extends Phaser.Scene {
       });
     });
 
-    socket.on("characterFalled", (playerNum) => {
+    socket.on("characterFell", (playerNum) => {
       if (!playerNum) {
         this.time.addEvent({
           callback: () => {
@@ -231,7 +231,7 @@ export default class Multi extends Phaser.Scene {
     );
 
     // Show Mouse Scroll
-    this.counter.setText(`Mouse Scroll   ${this.count}`);
+    this.scrollCounter.setText(`Mouse Scroll   ${this.scrollCount}`);
 
     // Show Character Velocity
     if (this.alien) {
@@ -245,7 +245,7 @@ export default class Multi extends Phaser.Scene {
     //other player's animation
     if (scene.otherPlayers.children.entries) {
       scene.otherPlayers.children.entries.forEach((eachPlayer) => {
-        eachPlayer.play("alien-walk-1", true);
+        eachPlayer.play("alien-walk", true);
 
         //collision
         if (this.alien) {
@@ -285,7 +285,7 @@ export default class Multi extends Phaser.Scene {
       if (this.alien.body.velocity.x === 0) {
         this.alien.play("alien-idle");
       } else {
-        this.alien.play("alien-walk-1", true);
+        this.alien.play("alien-walk", true);
       }
 
       socket.emit("characterMovement", {
@@ -359,6 +359,7 @@ export default class Multi extends Phaser.Scene {
     });
   }
 
+  //create object
   createRocket() {
     this.rocketGroup = this.add.group({
       defaultKey: "rocket",
@@ -377,15 +378,6 @@ export default class Multi extends Phaser.Scene {
           .setActive(true)
           .setVisible(true);
       },
-    });
-  }
-
-  updateRocket() {
-    this.rocketGroup.incX(-4);
-    this.rocketGroup.getChildren().forEach((rocket) => {
-      if (rocket.active && rocket.x < -10) {
-        this.rocketGroup.killAndHide(rocket);
-      }
     });
   }
 
@@ -413,15 +405,6 @@ export default class Multi extends Phaser.Scene {
     });
   }
 
-  updateMeteorite() {
-    this.meteoriteGroup.incX(-3);
-    this.meteoriteGroup.getChildren().forEach((meteorite) => {
-      if (meteorite.active && meteorite.x < -10) {
-        this.meteoriteGroup.killAndHide(meteorite);
-      }
-    });
-  }
-
   createSmallStar() {
     this.starGroup = this.add.group({
       defaultKey: "starSmall",
@@ -443,15 +426,6 @@ export default class Multi extends Phaser.Scene {
     });
   }
 
-  updateSmallStar() {
-    this.starGroup.incX(-7);
-    this.starGroup.getChildren().forEach((star) => {
-      if (star.active && star.x < -10) {
-        this.starGroup.killAndHide(star);
-      }
-    });
-  }
-
   createBigStar() {
     this.bigStarGroup = this.add.group({
       defaultKey: "starBig",
@@ -470,6 +444,34 @@ export default class Multi extends Phaser.Scene {
           .setActive(true)
           .setVisible(true);
       },
+    });
+  }
+
+  //update object
+  updateRocket() {
+    this.rocketGroup.incX(-4);
+    this.rocketGroup.getChildren().forEach((rocket) => {
+      if (rocket.active && rocket.x < -10) {
+        this.rocketGroup.killAndHide(rocket);
+      }
+    });
+  }
+
+  updateMeteorite() {
+    this.meteoriteGroup.incX(-3);
+    this.meteoriteGroup.getChildren().forEach((meteorite) => {
+      if (meteorite.active && meteorite.x < -10) {
+        this.meteoriteGroup.killAndHide(meteorite);
+      }
+    });
+  }
+
+  updateSmallStar() {
+    this.starGroup.incX(-7);
+    this.starGroup.getChildren().forEach((star) => {
+      if (star.active && star.x < -10) {
+        this.starGroup.killAndHide(star);
+      }
     });
   }
 

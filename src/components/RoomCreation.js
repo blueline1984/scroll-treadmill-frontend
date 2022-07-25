@@ -15,7 +15,7 @@ function RoomCreation({ onClose }) {
 
   const handleRoomCreation = () => {
     if (roomTitle.length === 0) {
-      alert("Please,Insert Room Title");
+      alert("Please, Insert Room Title");
     } else {
       socket.emit("createRoom", roomTitle);
       navigate("/roomlist");
@@ -23,21 +23,20 @@ function RoomCreation({ onClose }) {
   };
 
   return (
-    <ModalWrapper>
+    <RoomCreationModalWrapper>
       <h1>Create Room</h1>
       <input
-        id="title"
         type="text"
         onChange={handleInputChange}
         placeholder="Room's Title "
       />
       <button onClick={handleRoomCreation}>Create</button>
       <button onClick={onClose}>Cancle</button>
-    </ModalWrapper>
+    </RoomCreationModalWrapper>
   );
 }
 
-const ModalWrapper = styled.div`
+const RoomCreationModalWrapper = styled.div`
   input {
     width: 70%;
     padding: 10px 20px;
@@ -51,6 +50,7 @@ const ModalWrapper = styled.div`
     font-size: 30px;
     vertical-align: middle;
   }
+
   button {
     background-color: #adcf9f;
   }
