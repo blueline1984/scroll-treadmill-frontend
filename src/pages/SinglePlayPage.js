@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Modal from "../components/Modal";
 
 import config from "../phaser/scenes/SinglePlay/config";
+import styled from "styled-components";
 
 function GamePage() {
   const [isGameResultModalOpen, setIsGameResultModalOpen] = useState(false);
@@ -32,15 +33,26 @@ function GamePage() {
         <Modal
           backgroudColor="#354259"
           message={
-            <>
-              <h1 style={{ color: "#fff", background: "#354259" }}>Result</h1>
+            <ResultModalWrapper>
+              <h1>Result</h1>
+              <div>Game Over!</div>
               <button onClick={onMoveToMain}>Back To Main</button>
-            </>
+            </ResultModalWrapper>
           }
         ></Modal>
       )}
     </>
   );
 }
+
+const ResultModalWrapper = styled.div`
+  background: #354259;
+  color: #fff;
+  font-size: 50px;
+
+  button {
+    background: #354259;
+  }
+`;
 
 export default GamePage;

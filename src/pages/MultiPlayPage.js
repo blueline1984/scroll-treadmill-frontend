@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Modal from "../components/Modal";
 
 import config from "../phaser/scenes/MultiPlay/config";
+import styled from "styled-components";
 
 function MultiPlayPage() {
   const [isGameResultModalOpen, setIsGameResultModalOpen] = useState(false);
@@ -32,15 +33,26 @@ function MultiPlayPage() {
         <Modal
           backgroudColor="#ADCF9F"
           message={
-            <>
-              <h1 style={{ color: "#fff", background: "#ADCF9F" }}>Result</h1>
+            <ResultModalWrapper>
+              <h1>Result</h1>
+              <div>Game Over!</div>
               <button onClick={onMoveToMain}>Back To Main</button>
-            </>
+            </ResultModalWrapper>
           }
         ></Modal>
       )}
     </>
   );
 }
+
+const ResultModalWrapper = styled.div`
+  background: #adcf9f;
+  color: #fff;
+  font-size: 50px;
+
+  button {
+    background: #adcf9f;
+  }
+`;
 
 export default MultiPlayPage;
