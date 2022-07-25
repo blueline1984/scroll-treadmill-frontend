@@ -2,10 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { HiOutlineVolumeOff, HiOutlineVolumeUp } from "react-icons/hi";
 import { AiOutlineEye, AiOutlineInfoCircle } from "react-icons/ai";
 import mainThemeSong from "../assets/main_theme.mp3";
-
 import ModeSelection from "../components/ModeSelection";
 import Modal from "../components/Modal";
-
 import styled from "styled-components";
 
 function MainPage() {
@@ -31,7 +29,6 @@ function MainPage() {
   };
 
   useEffect(() => {
-    //위치 변경
     if (isPlaying) {
       backgroundSoundRef.current.play();
       backgroundSoundRef.current.loop = true;
@@ -57,6 +54,7 @@ function MainPage() {
                 This game is made for optimizing mouse scroll event in
                 JavaScript.....
               </p>
+              <button onClick={closeModal}>Close</button>
             </InformationModalWrapper>
           }
         />
@@ -137,6 +135,14 @@ const GameModeWrapper = styled.div`
 `;
 
 const InformationModalWrapper = styled.div`
+  display: block;
+  justify-content: center;
+  padding: 0 5% 5% 5%;
+  margin-left: auto;
+  margin-right: auto;
+  align-items: center;
+  text-align: center;
+
   h1 {
     margin-top: 0;
   }
@@ -146,6 +152,20 @@ const InformationModalWrapper = styled.div`
     font-size: 40px;
     padding: 0 5%;
     margin: 0;
+  }
+
+  button {
+    background-color: #a0bcc2;
+    margin: 10%;
+    padding: 10px 15px;
+    width: 30%;
+    color: #fff;
+    font-size: 35px;
+    border: 1px solid #fff;
+  }
+  button:hover {
+    background-color: #fff;
+    color: #a0bcc2;
   }
 `;
 

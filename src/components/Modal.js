@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-
 import Portal from "../Portal";
 
 function Modal({ message, backgroundColor, informationContent }) {
@@ -41,7 +40,7 @@ const ModalBody = styled.div`
 const ModalContent = styled.div`
   display: block;
   justify-content: center;
-  padding: 0 5% 5% 5%;
+  padding: 3% 0 0 0;
   margin-left: auto;
   margin-right: auto;
   width: 40%;
