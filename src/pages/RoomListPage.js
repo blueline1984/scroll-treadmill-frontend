@@ -10,6 +10,10 @@ function RoomListPage() {
   const [roomList, setRoomList] = useState({});
   const navigate = useNavigate();
 
+  const onMoveToMain = () => {
+    window.location.replace("/");
+  };
+
   //해당 방에 참가
   const handleJoinRoom = (roomId) => {
     if (!joinRoom) {
@@ -30,18 +34,13 @@ function RoomListPage() {
 
   return (
     <>
-      <HeadWrapper>
+      <HeaderWrapper>
         <div>Room List</div>
-        <div
-          className="goToMain"
-          onClick={() => {
-            navigate("/");
-          }}
-        >
+        <div className="button_BackToMain" onClick={onMoveToMain}>
           Back To Main
         </div>
-      </HeadWrapper>
-      <ContentWrapper>
+      </HeaderWrapper>
+      <BodyWrapper>
         {Object.keys(roomList).map((roomId) => (
           <div key={roomId} className="content">
             <div>{roomList[roomId].roomTitle}</div>
@@ -55,32 +54,32 @@ function RoomListPage() {
             )}
           </div>
         ))}
-      </ContentWrapper>
+      </BodyWrapper>
     </>
   );
 }
 
-const HeadWrapper = styled.div`
+const HeaderWrapper = styled.div`
   padding: 3% 5%;
   display: flex;
-  color: white;
+  color: #fff;
   justify-content: space-between;
   text-align: center;
   align-items: center;
   font-size: 70px;
 
-  .goToMain {
+  .button_BackToMain {
     font-size: 40px;
     cursor: pointer;
   }
-  .goToMain:hover {
+  .button_BackToMain:hover {
     text-decoration: underline;
     text-decoration-thickness: 1px;
     text-underline-position: under;
   }
 `;
 
-const ContentWrapper = styled.div`
+const BodyWrapper = styled.div`
   margin: 3%;
   color: #fff;
 

@@ -17,12 +17,15 @@ function MainPage() {
   const handleSound = () => {
     setIsPlaying((isPlaying) => !isPlaying);
   };
+
   const handleBlindMode = () => {
     setOnBlindMode((onBlindMode + 1) % 3);
   };
+
   const openModal = () => {
     setIsOpen(true);
   };
+
   const closeModal = () => {
     setIsOpen(false);
   };
@@ -32,7 +35,6 @@ function MainPage() {
     if (isPlaying) {
       backgroundSoundRef.current.play();
       backgroundSoundRef.current.loop = true;
-      backgroundSoundRef.current.autoplay = true;
     } else {
       backgroundSoundRef.current.pause();
     }
@@ -45,17 +47,17 @@ function MainPage() {
           onClose={closeModal}
           backgroudColor="#A0BCC2"
           message={
-            <InformationWrapper>
+            <InformationModalWrapper>
               <h1>about</h1>
-            </InformationWrapper>
+            </InformationModalWrapper>
           }
           informationContent={
-            <InformationWrapper>
+            <InformationModalWrapper>
               <p className="information">
                 This game is made for optimizing mouse scroll event in
                 JavaScript.....
               </p>
-            </InformationWrapper>
+            </InformationModalWrapper>
           }
         />
       )}
@@ -78,15 +80,16 @@ function MainPage() {
       </IconWrapper>
       <MainTitle>Scroll Treadmill</MainTitle>
       <SubTitle>Running game with mouse scroll event</SubTitle>
-      <ModeWrapper>
+      <GameModeWrapper>
         <ModeSelection onBlindMode={onBlindMode} />
-      </ModeWrapper>
+      </GameModeWrapper>
     </>
   );
 }
 
 const IconWrapper = styled.div`
   padding: 10px 24px;
+
   button {
     background-color: #a0bcc2;
     border: none;
@@ -102,6 +105,7 @@ const IconWrapper = styled.div`
   button.information {
     top: 17%;
   }
+
   .logo {
     color: #fff;
   }
@@ -125,20 +129,20 @@ const SubTitle = styled.div`
   align-items: center;
 `;
 
-const ModeWrapper = styled.div`
+const GameModeWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 5%;
 `;
 
-const InformationWrapper = styled.div`
+const InformationModalWrapper = styled.div`
   h1 {
     margin-top: 0;
   }
 
   p {
-    color: white;
+    color: #fff;
     font-size: 40px;
     padding: 0 5%;
     margin: 0;

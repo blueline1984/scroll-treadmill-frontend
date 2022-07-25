@@ -16,31 +16,29 @@ function MultiPlayPage() {
     });
 
     return () => {
-      game.destroy(true, true);
+      game.destroy(true, false);
     };
-  }, []);
+  }, [setIsGameResultModalOpen]);
 
-  const handleMainButtonClick = () => {
+  const onMoveToMain = () => {
     setIsGameResultModalOpen(false);
     window.location.replace("/");
   };
 
   return (
     <>
+      <div id="phaser-container" />
       {isGameResultModalOpen && (
         <Modal
           backgroudColor="#ADCF9F"
           message={
             <>
-              <h1 style={{ color: "white", background: "#ADCF9F" }}>Result</h1>
-              {/* <div>Time: </div>
-              <div>Speed: </div> */}
-              <button onClick={handleMainButtonClick}>Back To Main</button>
+              <h1 style={{ color: "#fff", background: "#ADCF9F" }}>Result</h1>
+              <button onClick={onMoveToMain}>Back To Main</button>
             </>
           }
         ></Modal>
       )}
-      <div id="phaser-container"></div>
     </>
   );
 }

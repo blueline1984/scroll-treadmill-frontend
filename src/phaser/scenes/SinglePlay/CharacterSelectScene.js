@@ -24,9 +24,8 @@ export default class CharacterSelect extends Phaser.Scene {
 
   create() {
     const { width, height } = this.scale;
-    console.log(this.scale);
     this.add
-      .text(width * 0.5, height * 0.1, "Character Selection", {
+      .text(width * 0.5, height * 0.1, "Select Your Character", {
         fontSize: "100px",
         fontFamily: "Amatic SC",
       })

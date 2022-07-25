@@ -1,60 +1,53 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { socket } from "../utils/socket";
-import styled from "styled-components";
 import readyClickSound from "../assets/ready_click.ogg";
+import styled from "styled-components";
 
 function WaitingPage() {
   const [players, setPlayers] = useState({});
-  const ImageArray = ["alien1", "alien2", "alien3"];
   const [imageIndex, setImageIndex] = useState(0);
-  const [selectedCharacter, setSelectedCharacter] = useState("alien1");
   const [isReady, setIsReady] = useState(false);
-  const [isNotReady, setIsNotReady] = useState(false);
-  const ImageLength = ImageArray.length;
-  const clickAudioRef = useRef(new Audio(readyClickSound));
 
-  const { roomId } = useParams();
+  const clickAudioRef = useRef(new Audio(readyClickSound));
+  const imageArray = ["alien1", "alien2", "alien3"];
+  const imageLength = imageArray.length;
+
   const navigate = useNavigate();
 
   const handleReady = () => {
     setIsReady(true);
-    setIsNotReady(false);
-    socket.emit("ready", socket.id, ImageArray[imageIndex]);
-    socket.emit("characterSelect", ImageArray[imageIndex], socket.id);
+    socket.emit("ready", socket.id, imageArray[imageIndex]);
+    socket.emit("characterSelect", imageArray[imageIndex], socket.id);
     clickAudioRef.current.play();
     clickAudioRef.current.loop = false;
   };
 
   const handleCancle = () => {
     setIsReady(false);
-    setIsNotReady(true);
   };
 
-  //이름 변경
   const handlePrevCharacterImage = () => {
-    setImageIndex(imageIndex === 0 ? ImageLength - 1 : imageIndex - 1);
+    setImageIndex(imageIndex === 0 ? imageLength - 1 : imageIndex - 1);
   };
 
-  //이름 변경
   const handleNextCharacterImage = () => {
-    setImageIndex(imageIndex === ImageLength - 1 ? 0 : imageIndex + 1);
+    setImageIndex(imageIndex === imageLength - 1 ? 0 : imageIndex + 1);
   };
 
   useEffect(() => {
-    //data 수정
-    socket.on("welcome", (data) => {
+    socket.on("welcome", () => {
       socket.emit("getAllPlayers");
       socket.on("players", (players) => {
         setPlayers(players);
       });
     });
 
-    socket.on("readyCompleted", (data) => {
+    socket.on("readyCompleted", (players) => {
       if (
-        data[Object.keys(data)[0]].isReady &&
-        data[Object.keys(data)[1]].isReady &&
-        data[Object.keys(data)[2]].isReady
+        players[Object.keys(players)[0]].isReady &&
+        players[Object.keys(players)[1]].isReady &&
+        players[Object.keys(players)[2]].isReady
       ) {
         navigate("/multi");
       }
@@ -63,25 +56,24 @@ function WaitingPage() {
 
   return (
     <>
-      <h1>This is Room: {roomId}</h1>
       {Object.keys(players).map((playerId) => (
         <ListWrapper key={playerId}>
           <div className="characterSelector">
             <button onClick={handlePrevCharacterImage}>{`<`}</button>
             <img
-              src={`/textures/${ImageArray[imageIndex]}.png`}
-              alt="Character 01"
+              src={`/textures/${imageArray[imageIndex]}.png`}
+              alt="Character Image"
             />
             <button onClick={handleNextCharacterImage}>{`>`}</button>
           </div>
           <div>{players[playerId].name}</div>
           {socket.id === playerId ? (
             isReady ? (
-              <button className="cancleBtn" onClick={handleCancle}>
+              <button className="button_cancle" onClick={handleCancle}>
                 Cancle
               </button>
             ) : (
-              <button className="readyBtn" onClick={handleReady}>
+              <button className="button_ready" onClick={handleReady}>
                 Ready
               </button>
             )
@@ -97,21 +89,21 @@ const ListWrapper = styled.div`
   padding: 3% 5%;
   margin: 3%;
   justify-content: space-between;
-  border: solid 1px white;
+  border: solid 1px #fff;
   font-size: 70px;
-  color: white;
+  color: #fff;
   align-items: center;
 
   .characterSelector button {
     vertical-align: 50%;
     background-color: transparent;
     border: none;
-    color: white;
+    color: #fff;
     font-size: 30px;
     width: 50px;
   }
 
-  .readyBtn {
+  .button_ready {
     font-size: 40px;
     width: 250px;
     height: 60px;
@@ -121,12 +113,12 @@ const ListWrapper = styled.div`
     border-color: #fff;
     border: 1px solid #fff;
   }
-  .readyBtn:hover {
+  .button_ready:hover {
     color: #adcf9f;
     background-color: #fff;
   }
 
-  .cancleBtn {
+  .button_cancle {
     font-size: 40px;
     width: 250px;
     height: 60px;
@@ -136,7 +128,7 @@ const ListWrapper = styled.div`
     border-color: #fff;
     border: 1px solid #fff;
   }
-  .cancleBtn:hover {
+  .button_cancle:hover {
     color: #fff;
     background-color: #adcf9f;
   }
