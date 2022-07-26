@@ -15,7 +15,7 @@ function RoomListPage() {
 const RoomListPageContainer = styled.div`
   padding: 2%;
   background-color: #adcf9f;
-  height: 100%;
+  height: 100vh;
 `;
 
 export default RoomListPage;
