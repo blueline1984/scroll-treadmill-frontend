@@ -208,7 +208,6 @@ export default class Multi extends Phaser.Scene {
       this.physics.add.overlap(this.alien, this.zone, () => {
         this.time.addEvent({
           callback: () => {
-            console.log("찍히냐");
             socket.emit("characterFall", socket.id);
           },
           callbackScope: this,

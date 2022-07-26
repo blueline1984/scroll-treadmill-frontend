@@ -29,7 +29,7 @@ function MultiPlayPage() {
       <div id="phaser-container" />
       {isGameResultModalOpen && (
         <Modal
-          color="#ADCF9F"
+          backgroundColor="#adcf9f"
           message={
             <ResultModalWrapper>
               <h1>Result</h1>
@@ -44,7 +44,6 @@ function MultiPlayPage() {
 }
 
 const ResultModalWrapper = styled.div`
-  background: #adcf9f;
   color: #fff;
   font-size: 50px;
 
