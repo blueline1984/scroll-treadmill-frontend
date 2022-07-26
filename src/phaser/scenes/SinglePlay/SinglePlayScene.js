@@ -1,36 +1,101 @@
 import Phaser from "phaser";
 import CountDownScene from "../CountDownScene";
+import createAlienAnimations from "../../animations/Alien";
+import createTreadmillAnimations from "../../animations/Treadmill";
 
 export default class Single extends Phaser.Scene {
   constructor() {
     super("single");
-
-    //initial treadmill speed
     this.treadmillAcceleration = -3;
     this.scrollCount = 0;
   }
 
   init(data) {
+    this.width = this.scale.width;
+    this.height = this.scale.height;
     this.selectedCharacter = data.character;
   }
 
   create() {
-    this.time.addEvent({
-      delay: 1000,
-      callback: () => {
-        console.log("done");
-      },
-      callbackScope: this,
-      reapeat: 1,
-    });
-    //audio
     this.inGameMusic = this.sound.add("ingame", { loop: true });
 
-    //count down scene
     const countDownScene = new CountDownScene(this.scene, this.inGameMusic);
+
     this.scene.add("CountDownScene", countDownScene, true);
 
-    //Character Velocity
+    createTreadmillAnimations(this.anims);
+
+    createAlienAnimations(this.anims);
+
+    this.setProgressBar();
+
+    this.createAlien();
+
+    this.createTreadmill();
+
+    this.setGameOver();
+
+    this.physics.add.collider(this.player, this.treadmill);
+
+    this.setMouseScrollEvent();
+
+    this.createRocket();
+
+    this.createMeteorite();
+
+    this.createSmallStar();
+
+    this.createBigStar();
+  }
+
+  update() {
+    this.updateTimer();
+
+    this.velocity.setText(
+      `Speed   ${this.player.body.velocity.x.toFixed(1) / 10}`
+    );
+
+    this.scrollCounter.setText(`Mouse Scroll   ${this.scrollCount}`);
+
+    this.player.setAcceleration(0);
+    this.player.setDrag(0);
+
+    if (!this.player.body.acceleration.x) {
+      this.player.body.setDrag(50);
+    }
+
+    if (this.player.body.velocity.x === 0) {
+      this.player.play("alien-idle");
+    } else {
+      this.player.play("alien-walk", true);
+    }
+
+    if (this.treadmill.body.touching.up && this.player.body.touching.down) {
+      this.player.body.position.add({ x: this.treadmillAcceleration, y: 0 });
+    } else if (this.player.body.position.x < this.width * 0.15) {
+      this.player.body.position.add({
+        x: this.treadmillAcceleration,
+        y: 0,
+      });
+    }
+
+    this.updateRocket();
+
+    this.updateMeteorite();
+
+    this.updateSmallStar();
+
+    this.updateBigStar();
+  }
+
+  setProgressBar() {
+    this.stTime = new Date().getTime();
+
+    this.timer = this.add.text(250, 30, "Time ", {
+      fontSize: "65px",
+      fontFamily: "Amatic SC",
+    });
+
     this.velocity = this.add.text(950, 30, `Speed `, {
       fontSize: "70px",
       fontFamily: "Amatic SC",
@@ -40,76 +105,15 @@ export default class Single extends Phaser.Scene {
       fontSize: "70px",
       fontFamily: "Amatic SC",
     });
+  }
 
-    //Timer
-    this.addTimer();
-    this.stTime = new Date().getTime();
-
-    //Character Animation
-    //Treadmill
-    this.anims.create({
-      key: "treadmill",
-      frames: [
-        {
-          key: "treadmill",
-          frame: 0,
-        },
-      ],
-    });
-
-    this.anims.create({
-      key: "treadmill-working",
-      frames: this.anims.generateFrameNumbers("treadmill", {
-        start: 0,
-        end: 3,
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
-
-    //Alien
-    this.anims.create({
-      key: "alien-idle",
-      frames: [
-        {
-          key: "alien",
-          frame: 0,
-        },
-      ],
-    });
-
-    this.anims.create({
-      key: "alien-walk",
-      frames: this.anims.generateFrameNumbers("alien", {
-        start: 0,
-        end: 1,
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
-
-    const { width, height } = this.scale;
-
-    this.player = this.physics.add
-      .sprite(width * 0.5, height * 0.5, "alien")
-      .setSize(50, 80)
-      .setOffset(10, 10)
-      .setGravityY(500);
-
-    this.treadmill = this.physics.add
-      .sprite(width * 0.5, height * 0.7, "treadmill")
-      .setSize(1520, 100)
-      .setOffset(120, 570)
-      .play("treadmill-working")
-      .setImmovable();
-
-    //Game over zone
-    this.zone = this.add.zone(width * 0.1, height).setSize(width * 3, 100);
+  setGameOver() {
+    this.zone = this.add
+      .zone(this.width * 0.1, this.height)
+      .setSize(this.width * 3, 100);
     this.physics.world.enable(this.zone);
     this.zone.body.setAllowGravity(false);
     this.zone.body.moves = false;
-
-    //Game over modal
     this.physics.add.overlap(this.player, this.zone, () => {
       this.time.addEvent({
         callback: () => {
@@ -121,25 +125,39 @@ export default class Single extends Phaser.Scene {
         delay: 1000,
       });
     });
+  }
 
-    //Conveyor Belt
-    this.treadmill.setImmovable();
+  createAlien() {
+    this.player = this.physics.add
+      .sprite(this.width * 0.5, this.height * 0.5, "alien")
+      .setSize(50, 80)
+      .setOffset(10, 10)
+      .setGravityY(500);
+
+    this.player.body.maxVelocity.x = 1000;
+  }
+
+  createTreadmill() {
+    this.treadmill = this.physics.add
+      .sprite(this.width * 0.5, this.height * 0.7, "treadmill")
+      .setSize(1520, 100)
+      .setOffset(120, 570)
+      .play("treadmill-working")
+      .setImmovable();
+
     this.surfaceSpeed = new Phaser.Math.Vector2(0.5, 0);
 
-    //Collide Treadmill and Player
-    this.physics.add.collider(this.player, this.treadmill);
+    window.setInterval(() => {
+      this.treadmillAcceleration -= 0.5;
+    }, 10000);
+  }
 
-    //Character Max Velocity
-    this.player.body.maxVelocity.x = 500;
-
-    //Treadmill Speed up
-    this.speedTreadmill();
-
-    const throttle = (callback, limit) => {
+  setMouseScrollEvent() {
+    const throttle = (callbackFn, limit) => {
       let waiting = false;
       return () => {
         if (!waiting) {
-          callback.apply(this, arguments);
+          callbackFn.apply(this, arguments);
           waiting = true;
           setTimeout(() => {
             waiting = false;
@@ -156,70 +174,6 @@ export default class Single extends Phaser.Scene {
       }, 90),
       { capture: true, passive: true }
     );
-
-    this.createRocket();
-    this.createMeteorite();
-    this.createSmallStar();
-    this.createBigStar();
-  }
-
-  update() {
-    //Time Checker
-    this.updateTimer();
-
-    // Show Mouse Scroll
-    this.scrollCounter.setText(`Mouse Scroll   ${this.scrollCount}`);
-
-    // Show Character Velocity
-    this.velocity.setText(
-      `Speed   ${this.player.body.velocity.x.toFixed(1) / 10}`
-    );
-
-    //Character Acceleration
-    this.player.setAcceleration(0);
-    this.player.setDrag(0);
-
-    if (!this.player.body.acceleration.x) {
-      this.player.body.setDrag(50);
-    }
-
-    // No wheel anmaiton stop
-    if (this.player.body.velocity.x === 0) {
-      this.player.play("alien-idle");
-    } else {
-      this.player.play("alien-walk", true);
-    }
-
-    //Treadmill Velocity
-    const { width } = this.scale;
-    if (this.treadmill.body.touching.up && this.player.body.touching.down) {
-      this.player.body.position.add({ x: this.treadmillAcceleration, y: 0 });
-    } else if (this.player.body.position.x < width * 0.15) {
-      this.player.body.position.add({
-        x: this.treadmillAcceleration,
-        y: 0,
-      });
-    }
-
-    this.updateRocket();
-    this.updateMeteorite();
-    this.updateSmallStar();
-    this.updateBigStar();
-  }
-
-  // Time Checker
-  addTimer() {
-    this.timer = this.add.text(250, 30, "Time ", {
-      fontSize: "65px",
-      fontFamily: "Amatic SC",
-    });
-  }
-
-  //Treadmill Speed Setting
-  speedTreadmill() {
-    window.setInterval(() => {
-      this.treadmillAcceleration -= 1;
-    }, 5000);
   }
 
   updateTimer() {

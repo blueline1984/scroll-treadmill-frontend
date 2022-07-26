@@ -5,32 +5,30 @@ export default class Preloader extends Phaser.Scene {
     super("preloader");
   }
 
+  init() {
+    this.width = this.scale.width;
+    this.height = this.scale.height;
+  }
+
   preload() {
-    //loading
     this.setLoading();
 
-    //audio
     this.loadBackgroundMusic();
 
-    //object
     this.loadBackgroundObject();
 
-    //Alien
     this.load.spritesheet("alien", `textures/alien2_spritesheet.png`, {
       frameWidth: 68,
       frameHeight: 93,
     });
 
-    //Treadmill
     this.load.spritesheet("treadmill", "textures/treadmill_spritesheet.png", {
       frameWidth: 1800,
       frameHeight: 750,
     });
 
-    //Chracter identifier
     this.load.image("me", "textures/me.png");
 
-    // loading
     this.load.on("progress", this.updateLoading, {
       loadingText: this.loadingText,
     });
@@ -39,10 +37,8 @@ export default class Preloader extends Phaser.Scene {
   }
 
   setLoading() {
-    const { width, height } = this.scale;
-
     this.loadingText = this.add
-      .text(width * 0.5, height * 0.4, "Loading...", {
+      .text(this.width * 0.5, this.height * 0.4, "Loading...", {
         fontSize: "200px",
         fill: "#FFFFFF",
         fontFamily: "Amatic SC",
