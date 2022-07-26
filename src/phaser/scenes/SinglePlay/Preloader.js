@@ -5,16 +5,13 @@ export default class Preloader extends Phaser.Scene {
     super("preloader");
   }
 
-  //Character select data transfer
   init(data) {
     this.selectedCharacter = data.character;
   }
 
   preload() {
-    // loading;
     this.setLoading();
 
-    //bgm
     this.loadBackgroundMusic();
 
     this.loadBackgroundObject();
@@ -33,9 +30,6 @@ export default class Preloader extends Phaser.Scene {
       frameHeight: 750,
     });
 
-    this.load.image("me", "textures/me.png");
-
-    //loading
     this.load.on("progress", this.updateLoading, {
       loadingText: this.loadingText,
     });
@@ -43,7 +37,6 @@ export default class Preloader extends Phaser.Scene {
     this.load.on("complete", this.completeLoading, { scene: this.scene });
   }
 
-  //loading
   setLoading() {
     const { width, height } = this.scale;
 

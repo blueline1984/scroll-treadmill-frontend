@@ -72,7 +72,6 @@ export default class CharacterSelect extends Phaser.Scene {
       this
     );
 
-    //character selection hover
     this.player1.on("pointerover", () => {
       this.player1.setAlpha(1);
     });
