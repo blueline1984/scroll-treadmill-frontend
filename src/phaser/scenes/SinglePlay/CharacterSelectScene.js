@@ -5,6 +5,11 @@ export default class CharacterSelect extends Phaser.Scene {
     super("characterSelect");
   }
 
+  init() {
+    this.width = this.scale.width;
+    this.height = this.scale.height;
+  }
+
   preload() {
     this.load.image("alien1", "textures/alien1.png", {
       frameWidth: 100,
@@ -23,28 +28,27 @@ export default class CharacterSelect extends Phaser.Scene {
   }
 
   create() {
-    const { width, height } = this.scale;
     this.add
-      .text(width * 0.5, height * 0.1, "Select Your Character", {
+      .text(this.width * 0.5, this.height * 0.1, "Select Your Character", {
         fontSize: "100px",
         fontFamily: "Amatic SC",
       })
       .setOrigin(0.5);
 
     this.player1 = this.add
-      .sprite(width * 0.3, height * 0.3, "alien1")
+      .sprite(this.width * 0.3, this.height * 0.3, "alien1")
       .setAlpha(0.5)
       .setInteractive()
       .setScale(1.5, 1.5);
 
     this.player2 = this.add
-      .image(width * 0.5, height * 0.3, "alien2")
+      .image(this.width * 0.5, this.height * 0.3, "alien2")
       .setAlpha(0.5)
       .setInteractive()
       .setScale(1.5, 1.5);
 
     this.player3 = this.add
-      .image(width * 0.7, height * 0.3, "alien3")
+      .image(this.width * 0.7, this.height * 0.3, "alien3")
       .setAlpha(0.5)
       .setInteractive()
       .setScale(1.5, 1.5);

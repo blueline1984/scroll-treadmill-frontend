@@ -8,10 +8,14 @@ export default class CountDownScene extends Phaser.Scene {
     this.inGameMusic = inGameMusic;
   }
 
+  init() {
+    this.width = this.scale.width;
+    this.height = this.scale.height;
+  }
+
   preload() {
     this.loadCountDownSound();
 
-    const { width, height } = this.scale;
     this.text = this.add.text(500, 500, "", {
       fontFamily: "ActionJ",
     });
@@ -20,7 +24,6 @@ export default class CountDownScene extends Phaser.Scene {
   create() {
     this.createCountDownSound();
 
-    const { width, height } = this.scale;
     this.cameras.main.fadeIn(500, 0, 0, 0);
 
     this.mainScene.pause();
@@ -48,14 +51,19 @@ export default class CountDownScene extends Phaser.Scene {
 
       if (this.countDownCount === 0) {
         this.countDownSoundStart.play();
-        this.text = this.add.text(width * 0.3, height * 0.4, "Scroll!", {
-          fontSize: "200px",
-          fontFamily: "ActionJ",
-        });
+        this.text = this.add.text(
+          this.width * 0.3,
+          this.height * 0.4,
+          "Scroll!",
+          {
+            fontSize: "200px",
+            fontFamily: "ActionJ",
+          }
+        );
       } else {
         this.text = this.add.text(
-          width * 0.45,
-          height * 0.4,
+          this.width * 0.45,
+          this.height * 0.4,
           this.countDownCount,
           {
             fontSize: "200px",
