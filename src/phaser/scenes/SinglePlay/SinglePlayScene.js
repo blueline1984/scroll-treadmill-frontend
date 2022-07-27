@@ -1,5 +1,6 @@
 import Phaser from "phaser";
-import CountDownScene from "../CountDownScene";
+
+import CountDownScene from "../common/CountDownScene";
 import createAlienAnimations from "../../animations/Alien";
 import createTreadmillAnimations from "../../animations/Treadmill";
 
